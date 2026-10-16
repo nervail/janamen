@@ -1,7 +1,15 @@
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
+// Адрес nginx бэкенда в Docker. Согласуй порт с напарником.
+const BACKEND_URL = 'http://localhost:8080';
+
 export default defineConfig({
-  plugins: [react()],
-})
+	plugins: [react()],
+	server: {
+		proxy: {
+			'/api': { target: BACKEND_URL, changeOrigin: true },
+			'/sanctum': { target: BACKEND_URL, changeOrigin: true },
+		},
+	},
+});
