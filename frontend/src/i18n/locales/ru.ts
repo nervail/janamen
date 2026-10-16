@@ -47,9 +47,35 @@ export const ru = {
 		hrCourses: 'Обучение',
 		hrIntegrations: 'Журнал интеграций',
 		notFound: 'Страница не найдена',
+		forbidden: 'Нет доступа',
 	},
 	common: {
 		inDevelopment: 'Экран в разработке',
+		loading: 'Загрузка…',
+		backHome: 'На главную',
+		forbiddenText: 'У вас нет прав для просмотра этого раздела',
+	},
+	auth: {
+		title: 'Вход в JanaMen',
+		subtitle: 'Используйте корпоративную учётную запись',
+		email: 'Email',
+		password: 'Пароль',
+		submit: 'Войти',
+		demoTitle: 'Демо-доступ',
+		demoHint: 'Нажмите, чтобы подставить данные для входа',
+	},
+	roles: {
+		employee: 'Работник',
+		manager: 'Руководитель',
+		hr: 'HR',
+	},
+	errors: {
+		required: 'Обязательное поле',
+		invalid_email: 'Некорректный email',
+		invalid_credentials: 'Неверный email или пароль',
+		network_error: 'Нет связи с сервером. Проверьте подключение',
+		server_error: 'Ошибка сервера. Попробуйте позже',
+		unknown: 'Что-то пошло не так',
 	},
 };
 
