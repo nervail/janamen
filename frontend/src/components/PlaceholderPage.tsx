@@ -1,15 +1,19 @@
 import { Stack, Text, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 
-type Props = { title: string };
+type Props = { titleKey: string };
 
-export function PlaceholderPage({ title }: Props) {
+export function PlaceholderPage({ titleKey }: Props) {
+	const { t } = useTranslation();
 	const location = useLocation();
 
 	return (
 		<Stack>
-			<Title order={2}>{title}</Title>
-			<Text c='dimmed'>Экран в разработке · {location.pathname}</Text>
+			<Title order={2}>{t(titleKey)}</Title>
+			<Text c='dimmed'>
+				{t('common.inDevelopment')} · {location.pathname}
+			</Text>
 		</Stack>
 	);
 }

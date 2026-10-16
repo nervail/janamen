@@ -3,57 +3,82 @@ import { AppLayout } from '../layouts/AppLayout';
 import { PlaceholderPage } from '../components/PlaceholderPage';
 
 export const router = createBrowserRouter([
-	{ path: '/login', element: <PlaceholderPage title='Вход' /> },
+	{ path: '/login', element: <PlaceholderPage titleKey='pages.login' /> },
 	{
 		path: '/',
 		element: <AppLayout />,
 		children: [
-			{ index: true, element: <PlaceholderPage title='Главная' /> },
-			{ path: 'profile', element: <PlaceholderPage title='Профиль' /> },
+			{ index: true, element: <PlaceholderPage titleKey='pages.home' /> },
+			{
+				path: 'profile',
+				element: <PlaceholderPage titleKey='pages.profile' />,
+			},
 
-			{ path: 'requests', element: <PlaceholderPage title='Мои заявки' /> },
+			{
+				path: 'requests',
+				element: <PlaceholderPage titleKey='pages.requests' />,
+			},
 			{
 				path: 'requests/new',
-				element: <PlaceholderPage title='Новая заявка' />,
+				element: <PlaceholderPage titleKey='pages.requestNew' />,
 			},
-			{ path: 'requests/:id', element: <PlaceholderPage title='Заявка' /> },
+			{
+				path: 'requests/:id',
+				element: <PlaceholderPage titleKey='pages.request' />,
+			},
 
-			{ path: 'courses', element: <PlaceholderPage title='Мои курсы' /> },
-			{ path: 'courses/:courseId', element: <PlaceholderPage title='Курс' /> },
+			{
+				path: 'courses',
+				element: <PlaceholderPage titleKey='pages.courses' />,
+			},
+			{
+				path: 'courses/:courseId',
+				element: <PlaceholderPage titleKey='pages.course' />,
+			},
 			{
 				path: 'courses/:courseId/chapters/:chapterId',
-				element: <PlaceholderPage title='Глава курса' />,
+				element: <PlaceholderPage titleKey='pages.chapter' />,
 			},
 
-			{ path: 'assistant', element: <PlaceholderPage title='AI Jana' /> },
-			{ path: 'kb', element: <PlaceholderPage title='База знаний' /> },
-			{ path: 'kb/:slug', element: <PlaceholderPage title='Документ' /> },
+			{
+				path: 'assistant',
+				element: <PlaceholderPage titleKey='pages.assistant' />,
+			},
+			{ path: 'kb', element: <PlaceholderPage titleKey='pages.kb' /> },
+			{
+				path: 'kb/:slug',
+				element: <PlaceholderPage titleKey='pages.kbDocument' />,
+			},
 
-			{ path: 'team', element: <PlaceholderPage title='Моя команда' /> },
+			{ path: 'team', element: <PlaceholderPage titleKey='pages.team' /> },
 
 			{
 				path: 'hr',
 				children: [
 					{
 						path: 'requests',
-						element: <PlaceholderPage title='Очередь заявок' />,
+						element: <PlaceholderPage titleKey='pages.hrRequests' />,
 					},
 					{
 						path: 'employees',
-						element: <PlaceholderPage title='Сотрудники' />,
+						element: <PlaceholderPage titleKey='pages.hrEmployees' />,
 					},
 					{
 						path: 'employees/:userId',
-						element: <PlaceholderPage title='Сотрудник' />,
+						element: <PlaceholderPage titleKey='pages.hrEmployee' />,
 					},
-					{ path: 'courses', element: <PlaceholderPage title='Обучение' /> },
+					{
+						path: 'courses',
+						element: <PlaceholderPage titleKey='pages.hrCourses' />,
+					},
 					{
 						path: 'integrations',
-						element: <PlaceholderPage title='Журнал интеграций' />,
+						element: <PlaceholderPage titleKey='pages.hrIntegrations' />,
 					},
 				],
 			},
-			{ path: '*', element: <PlaceholderPage title='Страница не найдена' /> },
+
+			{ path: '*', element: <PlaceholderPage titleKey='pages.notFound' /> },
 		],
 	},
 ]);

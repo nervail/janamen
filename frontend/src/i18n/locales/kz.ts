@@ -1,0 +1,56 @@
+import type { Translation } from './ru';
+
+export const kz: Translation = {
+	app: {
+		name: 'JanaMen',
+		tagline: 'Қызметкердің цифрлық кеңістігі',
+	},
+	nav: {
+		menu: 'Мәзір',
+		home: 'Басты бет',
+		profile: 'Профиль',
+		requests: 'Менің өтінімдерім',
+		courses: 'Менің курстарым',
+		assistant: 'AI Jana',
+		kb: 'Білім қоры',
+		team: 'Менің командам',
+		hrRequests: 'Өтінімдер кезегі',
+		hrEmployees: 'Қызметкерлер',
+		hrCourses: 'Оқыту',
+		hrIntegrations: 'Интеграциялар журналы',
+		sections: {
+			team: 'Басшыға',
+			hr: 'HR',
+		},
+	},
+	header: {
+		notifications: 'Хабарламалар',
+		profile: 'Профиль',
+		logout: 'Шығу',
+		language: 'Тіл',
+	},
+	pages: {
+		login: 'Кіру',
+		home: 'Басты бет',
+		profile: 'Профиль',
+		requests: 'Менің өтінімдерім',
+		requestNew: 'Жаңа өтінім',
+		request: 'Өтінім',
+		courses: 'Менің курстарым',
+		course: 'Курс',
+		chapter: 'Курс тарауы',
+		assistant: 'AI Jana',
+		kb: 'Білім қоры',
+		kbDocument: 'Құжат',
+		team: 'Менің командам',
+		hrRequests: 'Өтінімдер кезегі',
+		hrEmployees: 'Қызметкерлер',
+		hrEmployee: 'Қызметкер',
+		hrCourses: 'Оқыту',
+		hrIntegrations: 'Интеграциялар журналы',
+		notFound: 'Бет табылмады',
+	},
+	common: {
+		inDevelopment: 'Экран әзірленуде',
+	},
+};

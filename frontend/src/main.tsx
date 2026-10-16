@@ -8,6 +8,7 @@ import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 
 import { theme } from './theme';
+import './i18n';
 import App from './App';
 
 createRoot(document.getElementById('root')!).render(

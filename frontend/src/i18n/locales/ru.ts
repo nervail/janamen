@@ -1,0 +1,56 @@
+export const ru = {
+	app: {
+		name: 'JanaMen',
+		tagline: 'Цифровое пространство сотрудника',
+	},
+	nav: {
+		menu: 'Меню',
+		home: 'Главная',
+		profile: 'Профиль',
+		requests: 'Мои заявки',
+		courses: 'Мои курсы',
+		assistant: 'AI Jana',
+		kb: 'База знаний',
+		team: 'Моя команда',
+		hrRequests: 'Очередь заявок',
+		hrEmployees: 'Сотрудники',
+		hrCourses: 'Обучение',
+		hrIntegrations: 'Журнал интеграций',
+		sections: {
+			team: 'Руководителю',
+			hr: 'HR',
+		},
+	},
+	header: {
+		notifications: 'Уведомления',
+		profile: 'Профиль',
+		logout: 'Выйти',
+		language: 'Язык',
+	},
+	pages: {
+		login: 'Вход',
+		home: 'Главная',
+		profile: 'Профиль',
+		requests: 'Мои заявки',
+		requestNew: 'Новая заявка',
+		request: 'Заявка',
+		courses: 'Мои курсы',
+		course: 'Курс',
+		chapter: 'Глава курса',
+		assistant: 'AI Jana',
+		kb: 'База знаний',
+		kbDocument: 'Документ',
+		team: 'Моя команда',
+		hrRequests: 'Очередь заявок',
+		hrEmployees: 'Сотрудники',
+		hrEmployee: 'Сотрудник',
+		hrCourses: 'Обучение',
+		hrIntegrations: 'Журнал интеграций',
+		notFound: 'Страница не найдена',
+	},
+	common: {
+		inDevelopment: 'Экран в разработке',
+	},
+};
+
+export type Translation = typeof ru;

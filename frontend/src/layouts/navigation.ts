@@ -15,60 +15,70 @@ import {
 export type NavSection = 'main' | 'team' | 'hr';
 
 export type NavItem = {
-	label: string;
+	labelKey: string;
 	path: string;
 	icon: typeof IconHome;
 	section: NavSection;
 };
 
 export const navItems: NavItem[] = [
-	{ label: 'Главная', path: '/', icon: IconHome, section: 'main' },
-	{ label: 'Профиль', path: '/profile', icon: IconUser, section: 'main' },
+	{ labelKey: 'nav.home', path: '/', icon: IconHome, section: 'main' },
 	{
-		label: 'Мои заявки',
+		labelKey: 'nav.profile',
+		path: '/profile',
+		icon: IconUser,
+		section: 'main',
+	},
+	{
+		labelKey: 'nav.requests',
 		path: '/requests',
 		icon: IconFileText,
 		section: 'main',
 	},
-	{ label: 'Мои курсы', path: '/courses', icon: IconSchool, section: 'main' },
 	{
-		label: 'AI Jana',
+		labelKey: 'nav.courses',
+		path: '/courses',
+		icon: IconSchool,
+		section: 'main',
+	},
+	{
+		labelKey: 'nav.assistant',
 		path: '/assistant',
 		icon: IconMessageChatbot,
 		section: 'main',
 	},
-	{ label: 'База знаний', path: '/kb', icon: IconBook, section: 'main' },
+	{ labelKey: 'nav.kb', path: '/kb', icon: IconBook, section: 'main' },
 
-	{ label: 'Моя команда', path: '/team', icon: IconUsers, section: 'team' },
+	{ labelKey: 'nav.team', path: '/team', icon: IconUsers, section: 'team' },
 
 	{
-		label: 'Очередь заявок',
+		labelKey: 'nav.hrRequests',
 		path: '/hr/requests',
 		icon: IconInbox,
 		section: 'hr',
 	},
 	{
-		label: 'Сотрудники',
+		labelKey: 'nav.hrEmployees',
 		path: '/hr/employees',
 		icon: IconAddressBook,
 		section: 'hr',
 	},
 	{
-		label: 'Обучение',
+		labelKey: 'nav.hrCourses',
 		path: '/hr/courses',
 		icon: IconCertificate,
 		section: 'hr',
 	},
 	{
-		label: 'Журнал интеграций',
+		labelKey: 'nav.hrIntegrations',
 		path: '/hr/integrations',
 		icon: IconPlugConnected,
 		section: 'hr',
 	},
 ];
 
-export const sectionLabels: Record<NavSection, string | null> = {
+export const sectionLabelKeys: Record<NavSection, string | null> = {
 	main: null,
-	team: 'Руководителю',
-	hr: 'HR',
+	team: 'nav.sections.team',
+	hr: 'nav.sections.hr',
 };

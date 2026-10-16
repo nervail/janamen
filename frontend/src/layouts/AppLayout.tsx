@@ -20,8 +20,10 @@ import {
 	IconLogout,
 	IconUser,
 } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation } from 'react-router';
-import { navItems, sectionLabels, type NavSection } from './navigation';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { navItems, sectionLabelKeys, type NavSection } from './navigation';
 
 // Временно: заменим на данные из GET /me
 const abilities = { team: true, hr: true };
@@ -37,6 +39,7 @@ function isActive(pathname: string, path: string) {
 }
 
 export function AppLayout() {
+	const { t } = useTranslation();
 	const [opened, { toggle, close }] = useDisclosure();
 	const { pathname } = useLocation();
 
@@ -58,7 +61,7 @@ export function AppLayout() {
 							onClick={toggle}
 							hiddenFrom='sm'
 							size='sm'
-							aria-label='Меню'
+							aria-label={t('nav.menu')}
 						/>
 						<Text
 							component={Link}
@@ -68,17 +71,19 @@ export function AppLayout() {
 							c='brand.7'
 							td='none'
 						>
-							JanaMen
+							{t('app.name')}
 						</Text>
 					</Group>
 
 					<Group gap='xs' wrap='nowrap'>
+						<LanguageSwitcher />
+
 						<Indicator label='2' size={16} offset={4}>
 							<ActionIcon
 								variant='subtle'
 								color='gray'
 								size='lg'
-								aria-label='Уведомления'
+								aria-label={t('header.notifications')}
 							>
 								<IconBell size={20} />
 							</ActionIcon>
@@ -105,10 +110,10 @@ export function AppLayout() {
 									to='/profile'
 									leftSection={<IconUser size={16} />}
 								>
-									Профиль
+									{t('header.profile')}
 								</Menu.Item>
 								<Menu.Item color='red' leftSection={<IconLogout size={16} />}>
-									Выйти
+									{t('header.logout')}
 								</Menu.Item>
 							</Menu.Dropdown>
 						</Menu>
@@ -119,35 +124,38 @@ export function AppLayout() {
 			<AppShell.Navbar p='sm'>
 				<AppShell.Section grow component={ScrollArea}>
 					<Stack gap='md'>
-						{sections.map(section => (
-							<div key={section}>
-								{sectionLabels[section] && (
-									<Text
-										size='xs'
-										fw={700}
-										c='dimmed'
-										tt='uppercase'
-										px='sm'
-										mb={4}
-									>
-										{sectionLabels[section]}
-									</Text>
-								)}
-								{navItems
-									.filter(item => item.section === section)
-									.map(item => (
-										<NavLink
-											key={item.path}
-											component={Link}
-											to={item.path}
-											label={item.label}
-											leftSection={<item.icon size={18} stroke={1.6} />}
-											active={isActive(pathname, item.path)}
-											onClick={close}
-										/>
-									))}
-							</div>
-						))}
+						{sections.map(section => {
+							const labelKey = sectionLabelKeys[section];
+							return (
+								<div key={section}>
+									{labelKey && (
+										<Text
+											size='xs'
+											fw={700}
+											c='dimmed'
+											tt='uppercase'
+											px='sm'
+											mb={4}
+										>
+											{t(labelKey)}
+										</Text>
+									)}
+									{navItems
+										.filter(item => item.section === section)
+										.map(item => (
+											<NavLink
+												key={item.path}
+												component={Link}
+												to={item.path}
+												label={t(item.labelKey)}
+												leftSection={<item.icon size={18} stroke={1.6} />}
+												active={isActive(pathname, item.path)}
+												onClick={close}
+											/>
+										))}
+								</div>
+							);
+						})}
 					</Stack>
 				</AppShell.Section>
 			</AppShell.Navbar>

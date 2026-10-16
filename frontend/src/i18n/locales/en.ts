@@ -1,0 +1,56 @@
+import type { Translation } from './ru';
+
+export const en: Translation = {
+	app: {
+		name: 'JanaMen',
+		tagline: 'Employee digital workspace',
+	},
+	nav: {
+		menu: 'Menu',
+		home: 'Home',
+		profile: 'Profile',
+		requests: 'My requests',
+		courses: 'My courses',
+		assistant: 'AI Jana',
+		kb: 'Knowledge base',
+		team: 'My team',
+		hrRequests: 'Request queue',
+		hrEmployees: 'Employees',
+		hrCourses: 'Training',
+		hrIntegrations: 'Integration log',
+		sections: {
+			team: 'For managers',
+			hr: 'HR',
+		},
+	},
+	header: {
+		notifications: 'Notifications',
+		profile: 'Profile',
+		logout: 'Log out',
+		language: 'Language',
+	},
+	pages: {
+		login: 'Sign in',
+		home: 'Home',
+		profile: 'Profile',
+		requests: 'My requests',
+		requestNew: 'New request',
+		request: 'Request',
+		courses: 'My courses',
+		course: 'Course',
+		chapter: 'Chapter',
+		assistant: 'AI Jana',
+		kb: 'Knowledge base',
+		kbDocument: 'Document',
+		team: 'My team',
+		hrRequests: 'Request queue',
+		hrEmployees: 'Employees',
+		hrEmployee: 'Employee',
+		hrCourses: 'Training',
+		hrIntegrations: 'Integration log',
+		notFound: 'Page not found',
+	},
+	common: {
+		inDevelopment: 'Screen in development',
+	},
+};
