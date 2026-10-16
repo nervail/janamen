@@ -22,12 +22,16 @@ do_login() {
   CODE=$(curl -s -b "$JAR" -c "$JAR" "${HDR[@]}" -H "X-XSRF-TOKEN: $(xsrf)" \
     -d "{\"email\":\"$EMAIL\",\"password\":\"${PASS:-demo-password}\"}" \
     -o "$OUT" -w "%{http_code}" "$BASE/api/v1/auth/login")
+  [ "$CODE" = "200" ] || rm -f "$JAR"   # неудачный вход не оставляет «пустую» сессию
   show "$OUT" "$CODE"
 }
 
 if [ "$METHOD" = "login" ]; then do_login; exit; fi
 
-[ -f "$JAR" ] || do_login > /dev/null
+if [ ! -f "$JAR" ]; then
+  do_login > /dev/null
+  [ -f "$JAR" ] || { echo "HTTP 000"; echo "login failed for $EMAIL (429 из-за лимита? проверь LOGIN_RATE_LIMIT)"; exit 1; }
+fi
 
 ARGS=(-s -b "$JAR" -c "$JAR" "${HDR[@]}" -H "X-XSRF-TOKEN: $(xsrf)" -X "$METHOD")
 [ -n "$BODY" ] && ARGS+=(-d "$BODY")
