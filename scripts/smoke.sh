@@ -1,0 +1,93 @@
+#!/usr/bin/env bash
+# Сброс демо-данных и прогон основных сценариев. Запуск: ./scripts/smoke.sh
+cd "$(dirname "$0")/.."
+A=./scripts/api.sh
+OK=0; BAD=0
+
+# check "описание" <ожидаемый HTTP> "<подстрока в ответе или пусто>" команда...
+check() {
+  local desc=$1 code=$2 needle=$3; shift 3
+  local out got
+  out=$("$@" 2>&1)
+  got=$(echo "$out" | head -1 | awk '{print $2}')
+  if [ "$got" = "$code" ] && { [ -z "$needle" ] || echo "$out" | grep -q -- "$needle"; }; then
+    echo "✔ $desc"; OK=$((OK+1))
+  else
+    echo "✘ $desc  (ожидали HTTP $code и '$needle', получили HTTP $got)"
+    echo "$out" | head -25 | sed 's/^/    /'
+    BAD=$((BAD+1))
+  fi
+}
+
+health() {
+  local c; c=$(curl -s -o /tmp/health.out -w '%{http_code}' http://localhost:8080/api/health)
+  echo "HTTP $c"; cat /tmp/health.out
+}
+
+anon_me() {
+  local c; c=$(curl -s -o /tmp/anon.out -w '%{http_code}' -H Accept:application/json http://localhost:8080/api/v1/me)
+  echo "HTTP $c"; cat /tmp/anon.out
+}
+
+VAC='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-02","end_date":"2026-11-15","comment":"Семейная поездка"}}'
+OVERLAP='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-10","end_date":"2026-11-12"}}'
+TOOLONG='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-12-01","end_date":"2026-12-31"}}'
+PAST='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-01-01","end_date":"2026-01-05"}}'
+HRVAC='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-02","end_date":"2026-11-05"}}'
+
+echo "== Сброс базы =="
+docker compose exec -T app php artisan migrate:fresh --seed --force > /dev/null || { echo "миграции упали"; exit 1; }
+rm -f /tmp/janamen-*.jar    # старые сессии после сброса недействительны
+
+echo "== Инфраструктура и вход =="
+check "health: db ok"                       200 '"db":"ok"'              health
+check "/me без сессии → 401"                401 unauthenticated          anon_me
+check "неверный пароль → 422"               422 invalid_credentials      env PASS=wrong $A a.seitkali@janapost.demo login
+check "работник: team=false"                200 '"team": false'          $A a.seitkali@janapost.demo GET /api/v1/me
+check "руководитель: team=true"             200 '"team": true'           $A e.akhmetov@janapost.demo GET /api/v1/me
+check "HR-специалист: hr=true"              200 '"hr": true'             $A hr@janapost.demo GET /api/v1/me
+check "смена языка"                         200 '"locale": "kz"'         $A a.seitkali@janapost.demo PATCH /api/v1/me '{"locale":"kz"}'
+check "смена языка: невалидное → 422"       422 validation_failed        $A a.seitkali@janapost.demo PATCH /api/v1/me '{"locale":"xx"}'
+
+echo "== Профиль и 1С =="
+check "профиль: руководитель Ахметов"       200 'Ахметов'                $A a.seitkali@janapost.demo GET /api/v1/profile
+check "профиль: остаток 24"                 200 '"available_days": 24'   $A a.seitkali@janapost.demo GET /api/v1/profile
+check "профиль директора: manager=null"     200 '"manager": null'        $A director@janapost.demo GET /api/v1/profile
+
+echo "== Создание заявки =="
+check "заявка создана (pending_manager)"   201 '"status": "pending_manager"' $A a.seitkali@janapost.demo POST /api/v1/requests "$VAC"
+check "approver = Ахметов, действие cancel" 200 '"cancel"'               $A a.seitkali@janapost.demo GET /api/v1/requests/1
+check "остаток: зарезервировано 14"         200 '"reserved_days": 14'    $A a.seitkali@janapost.demo GET /api/v1/profile
+check "пересечение дат → dates_overlap"     422 dates_overlap            $A a.seitkali@janapost.demo POST /api/v1/requests "$OVERLAP"
+check "мало дней → insufficient_balance"    422 insufficient_balance     $A a.seitkali@janapost.demo POST /api/v1/requests "$TOOLONG"
+check "дата в прошлом → date_in_past"       422 date_in_past             $A a.seitkali@janapost.demo POST /api/v1/requests "$PAST"
+check "список моих заявок"                  200 '"total": 1'             $A a.seitkali@janapost.demo GET /api/v1/requests
+
+echo "== Права доступа =="
+check "чужая заявка → 403"                  403 forbidden                $A t.bekov@janapost.demo GET /api/v1/requests/1
+check "несуществующая → 404"                404 not_found                $A a.seitkali@janapost.demo GET /api/v1/requests/999
+check "работник не согласует → 403"         403 forbidden                $A t.bekov@janapost.demo POST /api/v1/requests/1/actions '{"action":"manager_approve"}'
+check "HR до руководителя → invalid_transition" 409 invalid_transition   $A hr@janapost.demo POST /api/v1/requests/1/actions '{"action":"hr_approve"}'
+check "отклонение без комментария → 422"    422 comment_required         $A e.akhmetov@janapost.demo POST /api/v1/requests/1/actions '{"action":"manager_reject"}'
+
+echo "== Цепочка согласования заявки 1 =="
+check "руководитель согласовал → pending_hr" 200 '"status": "pending_hr"' $A e.akhmetov@janapost.demo POST /api/v1/requests/1/actions '{"action":"manager_approve"}'
+check "HR одобрил → awaiting_signature"     200 awaiting_signature       $A hr@janapost.demo POST /api/v1/requests/1/actions '{"action":"hr_approve"}'
+check "подпись → approved"                  200 '"status": "approved"'   $A hr@janapost.demo POST /api/v1/requests/1/actions '{"action":"sign"}'
+check "история: 4 записи"                   200 '"action": "sign"'       $A a.seitkali@janapost.demo GET /api/v1/requests/1
+
+echo "== Правило «двух ключей» (заявка HR-специалиста) =="
+check "HR создал свою заявку (pending_manager)" 201 pending_manager      $A hr@janapost.demo POST /api/v1/requests "$HRVAC"
+check "HR согласует свою → self_approval_forbidden" 403 self_approval_forbidden $A hr@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_approve"}'
+check "чужой руководитель → 403"            403 forbidden                $A e.akhmetov@janapost.demo POST /api/v1/requests/2/actions '{"action":"manager_approve"}'
+check "руководитель HR согласовал"          200 pending_hr               $A hr.head@janapost.demo POST /api/v1/requests/2/actions '{"action":"manager_approve"}'
+check "он же второй шаг → already_participated" 403 already_participated $A hr.head@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_approve"}'
+check "другой HR: reject без комментария"   422 comment_required         $A hr2@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_reject"}'
+check "другой HR одобряет"                  200 awaiting_signature       $A hr2@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_approve"}'
+
+echo
+echo "Журнал интеграций:"
+docker compose exec -T db psql -U janamen -d janamen -c "select system, operation, status, message from integration_logs"
+
+echo "Итого: ✔ $OK  ✘ $BAD"
+[ "$BAD" -eq 0 ]
