@@ -40,7 +40,7 @@ export const authHandlers = [
 		}
 
 		session.set(user.id);
-		return HttpResponse.json({ data: user });
+		return HttpResponse.json({ data: session.get() ?? user });
 	}),
 
 	http.post(`${API}/auth/logout`, async () => {
@@ -69,6 +69,7 @@ export const authHandlers = [
 		}
 
 		user.locale = body.locale as Locale;
+		session.saveLocale(user.id, user.locale);
 		return HttpResponse.json({ data: user });
 	}),
 ];

@@ -1,3 +1,4 @@
+import i18n, { consumeExplicitLocaleChoice } from '../i18n';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
 	fetchMe,
@@ -19,7 +20,20 @@ export function useMe() {
 export function useLogin() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: login,
+		mutationFn: async (payload: { email: string; password: string }) => {
+			const me = await login(payload);
+			const current = i18n.resolvedLanguage as Locale | undefined;
+
+			// Язык выбран вручную на странице входа — сохраняем его в профиль
+			if (consumeExplicitLocaleChoice() && current && current !== me.locale) {
+				try {
+					return await updateLocale(current);
+				} catch {
+					return me;
+				}
+			}
+			return me;
+		},
 		onSuccess: me => queryClient.setQueryData(ME_QUERY_KEY, me),
 	});
 }

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
 	ActionIcon,
 	AppShell,
@@ -21,17 +22,11 @@ import {
 	IconUser,
 } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, useLocation } from 'react-router';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
+import { useLogout, useMe } from '../hooks/useAuth';
+import { getInitials, getShortName } from '../utils/user';
 import { navItems, sectionLabelKeys, type NavSection } from './navigation';
-
-// Временно: заменим на данные из GET /me
-const abilities = { team: true, hr: true };
-const currentUser = {
-	fullName: 'Сейткали Асель',
-	initials: 'АС',
-	position: 'Специалист по логистике',
-};
 
 function isActive(pathname: string, path: string) {
 	if (path === '/') return pathname === '/';
@@ -39,13 +34,33 @@ function isActive(pathname: string, path: string) {
 }
 
 export function AppLayout() {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
 	const [opened, { toggle, close }] = useDisclosure();
 	const { pathname } = useLocation();
+	const navigate = useNavigate();
+	const { data: me } = useMe();
+	const logoutMutation = useLogout();
+
+	// Язык из профиля главнее языка браузера
+	const profileLocale = me?.locale;
+	useEffect(() => {
+		if (profileLocale && profileLocale !== i18n.resolvedLanguage) {
+			void i18n.changeLanguage(profileLocale);
+		}
+	}, [profileLocale, i18n]);
+
+	// RequireAuth не пустит сюда без пользователя, проверка нужна для TypeScript
+	if (!me) return null;
 
 	const sections: NavSection[] = ['main'];
-	if (abilities.team) sections.push('team');
-	if (abilities.hr) sections.push('hr');
+	if (me.abilities.team) sections.push('team');
+	if (me.abilities.hr) sections.push('hr');
+
+	const handleLogout = () => {
+		logoutMutation.mutate(undefined, {
+			onSettled: () => navigate('/login', { replace: true }),
+		});
+	};
 
 	return (
 		<AppShell
@@ -89,22 +104,24 @@ export function AppLayout() {
 							</ActionIcon>
 						</Indicator>
 
-						<Menu position='bottom-end' width={220}>
+						<Menu position='bottom-end' width={240}>
 							<Menu.Target>
 								<UnstyledButton>
 									<Group gap={8} wrap='nowrap'>
 										<Avatar color='brand' radius='xl' size='sm'>
-											{currentUser.initials}
+											{getInitials(me.employee.full_name)}
 										</Avatar>
 										<Text size='sm' fw={500} visibleFrom='sm'>
-											{currentUser.fullName}
+											{getShortName(me.employee.full_name)}
 										</Text>
 										<IconChevronDown size={14} />
 									</Group>
 								</UnstyledButton>
 							</Menu.Target>
 							<Menu.Dropdown>
-								<Menu.Label>{currentUser.position}</Menu.Label>
+								<Menu.Label>
+									{me.employee.position} · {t(`roles.${me.role}`)}
+								</Menu.Label>
 								<Menu.Item
 									component={Link}
 									to='/profile'
@@ -112,7 +129,12 @@ export function AppLayout() {
 								>
 									{t('header.profile')}
 								</Menu.Item>
-								<Menu.Item color='red' leftSection={<IconLogout size={16} />}>
+								<Menu.Item
+									color='red'
+									leftSection={<IconLogout size={16} />}
+									onClick={handleLogout}
+									disabled={logoutMutation.isPending}
+								>
 									{t('header.logout')}
 								</Menu.Item>
 							</Menu.Dropdown>

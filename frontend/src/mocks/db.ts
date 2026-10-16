@@ -1,4 +1,4 @@
-import type { Me } from '../types/api';
+import type { Locale, Me } from '../types/api';
 
 export const DEMO_PASSWORD = 'password';
 
@@ -46,16 +46,27 @@ export const users: Me[] = [
 
 const SESSION_KEY = 'janamen.mock.session';
 
-// Имитация серверной сессии: сохраняется в localStorage, чтобы переживать F5
+const localeKey = (userId: number) => `janamen.mock.locale.${userId}`;
+
+// Имитация серверной сессии и сохранённого языка: живут в localStorage, чтобы переживать F5
 export const session = {
 	get(): Me | null {
 		const id = Number(localStorage.getItem(SESSION_KEY));
-		return users.find(u => u.id === id) ?? null;
+		const user = users.find(u => u.id === id);
+		if (!user) return null;
+		const storedLocale = localStorage.getItem(
+			localeKey(user.id),
+		) as Locale | null;
+		if (storedLocale) user.locale = storedLocale;
+		return user;
 	},
 	set(userId: number) {
 		localStorage.setItem(SESSION_KEY, String(userId));
 	},
 	clear() {
 		localStorage.removeItem(SESSION_KEY);
+	},
+	saveLocale(userId: number, locale: Locale) {
+		localStorage.setItem(localeKey(userId), locale);
 	},
 };

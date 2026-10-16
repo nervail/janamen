@@ -1,12 +1,25 @@
 import { Button, Menu } from '@mantine/core';
 import { IconCheck, IconLanguage } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { LANGUAGES } from '../i18n';
+import { useMe, useUpdateLocale } from '../hooks/useAuth';
+import { LANGUAGES, markExplicitLocaleChoice, type Language } from '../i18n';
 
 export function LanguageSwitcher() {
 	const { t, i18n } = useTranslation();
+	const { data: me } = useMe();
+	const updateLocale = useUpdateLocale();
+
 	const current =
 		LANGUAGES.find(l => l.code === i18n.resolvedLanguage) ?? LANGUAGES[0];
+
+	const handleChange = (code: Language) => {
+		void i18n.changeLanguage(code);
+		if (me) {
+			updateLocale.mutate(code);
+		} else {
+			markExplicitLocaleChoice();
+		}
+	};
 
 	return (
 		<Menu position='bottom-end' width={160}>
@@ -25,7 +38,7 @@ export function LanguageSwitcher() {
 				{LANGUAGES.map(lang => (
 					<Menu.Item
 						key={lang.code}
-						onClick={() => i18n.changeLanguage(lang.code)}
+						onClick={() => handleChange(lang.code)}
 						rightSection={
 							lang.code === current.code ? <IconCheck size={14} /> : null
 						}

@@ -48,5 +48,16 @@ i18n
 			},
 		},
 	});
+// Язык, выбранный вручную на странице входа, сохраняется в профиль после логина
+const EXPLICIT_LOCALE_KEY = 'janamen.locale.explicit';
 
+export function markExplicitLocaleChoice() {
+	sessionStorage.setItem(EXPLICIT_LOCALE_KEY, '1');
+}
+
+export function consumeExplicitLocaleChoice() {
+	const marked = sessionStorage.getItem(EXPLICIT_LOCALE_KEY) === '1';
+	sessionStorage.removeItem(EXPLICIT_LOCALE_KEY);
+	return marked;
+}
 export default i18n;
