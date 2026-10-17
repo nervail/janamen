@@ -43,3 +43,22 @@ export interface Me {
 		hr: boolean;
 	};
 }
+export interface VacationSummary {
+	balance_days: number;
+	reserved_days: number;
+	available_days: number;
+}
+
+export interface Profile {
+	last_name: string;
+	first_name: string;
+	middle_name: string | null;
+	full_name: string;
+	company: string;
+	position: string;
+	department: { id: number; name: string };
+	manager: { full_name: string; position: string } | null;
+	hired_at: string;
+	vacation: VacationSummary;
+	source: { system: string; synced_at: string };
+}

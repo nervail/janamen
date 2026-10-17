@@ -3,6 +3,7 @@ import { AppLayout } from '../layouts/AppLayout';
 import { PlaceholderPage } from '../components/PlaceholderPage';
 import { LoginPage } from '../pages/LoginPage';
 import { GuestOnly, RequireAbility, RequireAuth } from './guards';
+import { ProfilePage } from '../pages/profile/ProfilePage';
 
 export const router = createBrowserRouter([
 	{
@@ -17,10 +18,7 @@ export const router = createBrowserRouter([
 				element: <AppLayout />,
 				children: [
 					{ index: true, element: <PlaceholderPage titleKey='pages.home' /> },
-					{
-						path: 'profile',
-						element: <PlaceholderPage titleKey='pages.profile' />,
-					},
+					{ path: 'profile', element: <ProfilePage /> },
 
 					{
 						path: 'requests',
