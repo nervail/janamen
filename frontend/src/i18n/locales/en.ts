@@ -101,6 +101,8 @@ export const en: Translation = {
 		incomplete_answers: 'Please answer all questions',
 		invalid_option: 'Invalid answer option',
 		due_date_in_past: 'The due date cannot be in the past',
+		already_escalated: 'This question has already been sent to HR',
+		too_many_requests: 'Too many questions in a row. Please wait a minute',
 	},
 	profile: {
 		personalData: 'Personal data',
@@ -403,7 +405,8 @@ export const en: Translation = {
 	},
 	hrAcademy: {
 		title: 'Employee training',
-		subtitle: 'Jana Academy courses: assignments and progress of every employee',
+		subtitle:
+			'Jana Academy courses: assignments and progress of every employee',
 		assignCourse: 'Assign course',
 		assign: 'Assign',
 		showProgress: 'Progress',
@@ -449,7 +452,8 @@ export const en: Translation = {
 			presetMonth: 'In a month',
 			willReceive: 'Will receive the course: {{employees}}',
 			willSkip: 'Already taking the course and will be skipped: {{count}}',
-			allAlreadyAssigned: 'Everyone in this department is already taking this course',
+			allAlreadyAssigned:
+				'Everyone in this department is already taking this course',
 			notifyHint:
 				'Employees will get a notification and see the course in “My courses”',
 			submit: 'Assign',
@@ -461,5 +465,66 @@ export const en: Translation = {
 			nothing: 'No new assignments',
 			nothingText: 'All selected employees are already taking this course',
 		},
+	},
+	assistant: {
+		title: 'AI Jana',
+		subtitle:
+			'Answers HR questions from the Jana Post knowledge base and shows the source',
+		emptyTitle: 'Ask AI Jana a question',
+		emptyText:
+			'For example, about vacation, sick leave, business trips or using JanaMen. If there is no reliable answer, you can send the question to HR',
+		examples: {
+			vacationDays: 'How many days of annual leave am I entitled to?',
+			howToApply: 'How do I request a vacation?',
+			balance: 'Where can I see my vacation balance?',
+			sickLeave: 'What should I do if I get sick?',
+		},
+		placeholder: 'Ask a question…',
+		send: 'Send',
+		clear: 'Clear chat',
+		disclaimer:
+			'AI Jana answers only from the knowledge base, cannot see your personal data and does not make HR decisions',
+		thinking: 'Searching the knowledge base…',
+		sources: 'Sources',
+		notHelpful: 'Not helpful? Ask HR',
+		askHr: 'Ask HR',
+		retry: 'Retry',
+		result: {
+			not_found:
+				'The knowledge base has no reliable information on this. You can send the question to HR — the answer will come as a notification',
+			invalid_response:
+				'Could not find a reliable answer in the knowledge base. Send the question to HR for an accurate answer',
+			unavailable:
+				'The assistant is temporarily unavailable. You can send the question to HR',
+		},
+		escalated: 'Question sent to HR',
+		openRequest: 'Open request',
+		escalate: {
+			title: 'Ask HR',
+			hint: 'The question goes to the HR queue. The answer will come as a notification and will be visible in the request card',
+			question: 'Your question',
+			comment: 'Comment for HR (optional)',
+			commentPlaceholder: 'Add details if needed',
+			submit: 'Send to HR',
+			cancel: 'Cancel',
+			done: 'Question sent to HR',
+			doneText: 'The answer will come as a notification',
+		},
+	},
+	kb: {
+		title: 'Knowledge base',
+		subtitle: 'Jana Post policies and guides',
+		search: 'Search by title',
+		askAi: 'Ask AI Jana',
+		empty: 'No documents yet',
+		notFound: 'Nothing found',
+		notFoundText: 'Try a different query',
+		back: 'Knowledge base',
+		contents: 'Contents',
+		access: { manager: 'For managers', hr: 'For HR' },
+		forbiddenTitle: 'Document unavailable',
+		forbiddenText: 'This policy is available to a different role only',
+		missingTitle: 'Document not found',
+		missingText: 'The link may be outdated',
 	},
 };
