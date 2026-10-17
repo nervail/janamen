@@ -12,6 +12,7 @@ import {
 	Text,
 	TextInput,
 	Title,
+	Select,
 } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { useForm } from 'react-hook-form';
@@ -21,7 +22,9 @@ import { ApiError } from '../api/client';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '../config/demo';
 import { useLogin } from '../hooks/useAuth';
+import type { Role } from '../types/api';
 
+const ROLE_ORDER: Role[] = ['employee', 'manager', 'hr'];
 type FormValues = { email: string; password: string };
 
 export function LoginPage() {
@@ -140,22 +143,17 @@ export function LoginPage() {
 							<Text size='xs' c='dimmed' ta='center'>
 								{t('auth.demoHint')}
 							</Text>
-							{DEMO_ACCOUNTS.map(account => (
-								<Button
-									key={account.email}
-									variant='default'
-									fullWidth
-									justify='space-between'
-									onClick={() => fillDemo(account.email)}
-									rightSection={
-										<Text size='xs' c='dimmed'>
-											{account.email}
-										</Text>
-									}
-								>
-									{t(`roles.${account.role}`)}
-								</Button>
-							))}
+							<Select
+								placeholder={t('auth.demoPlaceholder')}
+								data={ROLE_ORDER.map(role => ({
+									group: t(`roles.${role}`),
+									items: DEMO_ACCOUNTS.filter(a => a.role === role).map(
+										a => a.email,
+									),
+								}))}
+								onChange={email => email && fillDemo(email)}
+								allowDeselect={false}
+							/>
 						</Stack>
 					</Stack>
 				</Paper>

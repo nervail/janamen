@@ -1,6 +1,6 @@
 import type { Locale, Me } from '../types/api';
 
-export const DEMO_PASSWORD = 'password';
+export { DEMO_PASSWORD } from '../config/demo';
 
 export const users: Me[] = [
 	{
@@ -31,7 +31,7 @@ export const users: Me[] = [
 	},
 	{
 		id: 2,
-		email: 'g.nurlanova@janapost.demo',
+		email: 'hr@janapost.demo',
 		role: 'hr',
 		locale: 'ru',
 		employee: {

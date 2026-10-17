@@ -1,3 +1,3 @@
-import { authHandlers } from './auth';
-
-export const handlers = [...authHandlers];
+// Моки только для эндпоинтов, которых ещё нет на бэкенде.
+// Авторизация, профиль и заявки уже живые.
+export const handlers = [];

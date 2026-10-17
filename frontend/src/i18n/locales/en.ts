@@ -64,7 +64,8 @@ export const en: Translation = {
 		password: 'Password',
 		submit: 'Sign in',
 		demoTitle: 'Demo access',
-		demoHint: 'Click to fill in the credentials',
+		demoHint: 'Pick an account and the credentials will be filled in',
+		demoPlaceholder: 'Choose an account',
 	},
 	roles: {
 		employee: 'Employee',
