@@ -7,6 +7,7 @@ import type {
 	RequestStatus,
 	RequestType,
 	VacationType,
+	ExecutableAction,
 } from '../types/api';
 
 export const REQUESTS_QUERY_KEY = ['requests'] as const;
@@ -41,4 +42,30 @@ export async function fetchMyRequests(
 		params,
 	});
 	return data;
+}
+export const requestQueryKey = (id: number) =>
+	[...REQUESTS_QUERY_KEY, 'detail', id] as const;
+
+export async function fetchRequest(id: number): Promise<RequestDetail> {
+	const { data } = await api.get<DataResponse<RequestDetail>>(
+		`/requests/${id}`,
+	);
+	return data.data;
+}
+
+export interface RequestActionInput {
+	action: ExecutableAction;
+	comment?: string | null;
+	answer?: string;
+}
+
+export async function performRequestAction(
+	id: number,
+	input: RequestActionInput,
+): Promise<RequestDetail> {
+	const { data } = await api.post<DataResponse<RequestDetail>>(
+		`/requests/${id}/actions`,
+		input,
+	);
+	return data.data;
 }

@@ -7,9 +7,14 @@ import {
 import {
 	createVacationRequest,
 	fetchMyRequests,
+	fetchRequest,
+	performRequestAction,
+	requestQueryKey,
 	REQUESTS_QUERY_KEY,
+	type RequestActionInput,
 	type RequestListParams,
 } from '../api/requests';
+import { ApiError } from '../api/client';
 import { PROFILE_QUERY_KEY } from '../api/profile';
 
 export function useMyRequests(params: RequestListParams) {
@@ -30,6 +35,35 @@ export function useCreateVacationRequest() {
 			void queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
 			void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
 			void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+		},
+	});
+}
+export function useRequest(id: number) {
+	return useQuery({
+		queryKey: requestQueryKey(id),
+		queryFn: () => fetchRequest(id),
+		enabled: Number.isInteger(id) && id > 0,
+	});
+}
+
+export function useRequestAction(id: number) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (input: RequestActionInput) => performRequestAction(id, input),
+		onSuccess: detail => {
+			// Ответ уже содержит обновлённую карточку — кладём его в кэш без лишнего запроса
+			queryClient.setQueryData(requestQueryKey(id), detail);
+			// Действие меняет списки, очереди, остаток отпуска и уведомления
+			void queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
+			void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
+			void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+			void queryClient.invalidateQueries({ queryKey: ['notifications'] });
+		},
+		onError: error => {
+			// 409: заявку уже изменил кто-то другой — подтягиваем актуальное состояние
+			if (error instanceof ApiError && error.status === 409) {
+				void queryClient.invalidateQueries({ queryKey: requestQueryKey(id) });
+			}
 		},
 	});
 }

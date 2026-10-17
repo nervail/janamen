@@ -4,29 +4,29 @@
 Фронт ставит ✅, когда убрал мок и проверил экран на реальном API.
 Контракт: `api.md`. Если формат ответа меняется, сначала правим `api.md`, потом код.
 
-| Группа | Бэкенд | Фронт | Примечания |
-|---|---|---|---|
-| `auth/login`, `auth/logout`, `GET/PATCH me` | ✅ | ✅ | |
-| `GET profile` | ✅ | | |
-| `GET/POST requests`, `GET requests/{id}`, `POST requests/{id}/actions` | ✅ | | для цепочки нужны `a.seitkali` → `e.akhmetov` → `hr` и `hr2` |
-| `notifications` (список, unread-count, read, read-all) | ✅ | | |
-| `GET dashboard` | ✅ | | `courses` пока пустой, появится с Academy |
-| `POST profile/corrections` | ✅ | | создаёт заявку `hr_question`, отвечает HR через `actions` (`answer`) |
-| `team/employees`, `team/requests` | ✅ | | `courses` в `team/employees` пока нули |
-| `hr/requests`, `hr/employees`, `hr/employees/{id}`, `hr/departments`, `hr/integration-logs` | ✅ | | `courses` в карточке сотрудника пока пустой |
-| `courses/*`, `hr/courses`, `hr/course-assignments` (Academy) | | | |
-| `kb/documents*` | | | |
-| `ai/ask`, `ai/messages/{id}/escalate` | | | |
+| Группа                                                                                      | Бэкенд | Фронт | Примечания                                                                                                                                               |
+| ------------------------------------------------------------------------------------------- | ------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `auth/login`, `auth/logout`, `GET/PATCH me`                                                 | ✅     | ✅    |                                                                                                                                                          |
+| `GET profile`                                                                               | ✅     | ✅    |                                                                                                                                                          |
+| `GET/POST requests`, `GET requests/{id}`, `POST requests/{id}/actions`                      | ✅     | ✅    | для цепочки нужны `a.seitkali` → `e.akhmetov` → `hr` и `hr2`; фронт: форма создания готова, проверяем после «фикс заявок», список и карточка — следующие |
+| `notifications` (список, unread-count, read, read-all)                                      | ✅     |       |                                                                                                                                                          |
+| `GET dashboard`                                                                             | ✅     |       | `courses` пока пустой, появится с Academy                                                                                                                |
+| `POST profile/corrections`                                                                  | ✅     | ✅    | создаёт заявку `hr_question`, отвечает HR через `actions` (`answer`); фронт: окно в профиле готово, нужна проверка отправки                              |
+| `team/employees`, `team/requests`                                                           | ✅     |       | `courses` в `team/employees` пока нули                                                                                                                   |
+| `hr/requests`, `hr/employees`, `hr/employees/{id}`, `hr/departments`, `hr/integration-logs` | ✅     |       | `courses` в карточке сотрудника пока пустой                                                                                                              |
+| `courses/*`, `hr/courses`, `hr/course-assignments` (Academy)                                |        |       |                                                                                                                                                          |
+| `kb/documents*`                                                                             |        |       |                                                                                                                                                          |
+| `ai/ask`, `ai/messages/{id}/escalate`                                                       |        |       |                                                                                                                                                          |
 
 ## Тестовые учётки (пароль у всех `demo-password`, домен `@janapost.demo`)
 
-| email | роль | заметки |
-|---|---|---|
-| a.seitkali, d.zhumabaev, t.bekov, a.kim | работник | подчинённые Ахметова |
-| e.akhmetov | руководитель | руководитель отдела логистики |
-| director | руководитель | директор, у него нет руководителя |
-| hr.head | HR | руководитель HR-отдела, согласует заявки HR-специалистов как руководитель |
-| hr, hr2 | HR | `hr` подчинён `hr.head`; нужны оба для правила «двух ключей» |
+| email                                   | роль         | заметки                                                                   |
+| --------------------------------------- | ------------ | ------------------------------------------------------------------------- |
+| a.seitkali, d.zhumabaev, t.bekov, a.kim | работник     | подчинённые Ахметова                                                      |
+| e.akhmetov                              | руководитель | руководитель отдела логистики                                             |
+| director                                | руководитель | директор, у него нет руководителя                                         |
+| hr.head                                 | HR           | руководитель HR-отдела, согласует заявки HR-специалистов как руководитель |
+| hr, hr2                                 | HR           | `hr` подчинён `hr.head`; нужны оба для правила «двух ключей»              |
 
 ## Отличия от api.md
 

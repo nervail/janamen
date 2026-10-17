@@ -6,6 +6,7 @@ import { GuestOnly, RequireAbility, RequireAuth } from './guards';
 import { ProfilePage } from '../pages/profile/ProfilePage';
 import { NewRequestPage } from '../pages/requests/NewRequestPage';
 import { RequestsPage } from '../pages/requests/RequestsPage';
+import { RequestPage } from '../pages/requests/RequestPage';
 
 export const router = createBrowserRouter([
 	{
@@ -24,10 +25,7 @@ export const router = createBrowserRouter([
 
 					{ path: 'requests', element: <RequestsPage /> },
 					{ path: 'requests/new', element: <NewRequestPage /> },
-					{
-						path: 'requests/:id',
-						element: <PlaceholderPage titleKey='pages.request' />,
-					},
+					{ path: 'requests/:id', element: <RequestPage /> },
 
 					{
 						path: 'courses',
