@@ -64,7 +64,8 @@ export const kz: Translation = {
 		password: 'Құпиясөз',
 		submit: 'Кіру',
 		demoTitle: 'Демо-қолжетімділік',
-		demoHint: 'Кіру деректерін енгізу үшін басыңыз',
+		demoHint: 'Есептік жазбаны таңдаңыз — кіру деректері өздігінен енгізіледі',
+		demoPlaceholder: 'Есептік жазбаны таңдаңыз',
 	},
 	roles: {
 		employee: 'Қызметкер',

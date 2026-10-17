@@ -1,6 +1,6 @@
 import type { Locale, Me } from '../types/api';
 
-export const DEMO_PASSWORD = 'demo-password';
+export { DEMO_PASSWORD } from '../config/demo';
 
 export const users: Me[] = [
 	{
