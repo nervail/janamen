@@ -14,6 +14,9 @@ import { MyCoursesPage } from '../pages/academy/MyCoursesPage';
 import { CoursePage } from '../pages/academy/CoursePage';
 import { ChapterPage } from '../pages/academy/ChapterPage';
 import { HrCoursesPage } from '../pages/hr/academy/HrCoursesPage';
+import { AssistantPage } from '../pages/assistant/AssistantPage';
+import { KbListPage } from '../pages/kb/KbListPage';
+import { KbDocumentPage } from '../pages/kb/KbDocumentPage';
 
 export const router = createBrowserRouter([
 	{
@@ -41,15 +44,9 @@ export const router = createBrowserRouter([
 						element: <ChapterPage />,
 					},
 
-					{
-						path: 'assistant',
-						element: <PlaceholderPage titleKey='pages.assistant' />,
-					},
-					{ path: 'kb', element: <PlaceholderPage titleKey='pages.kb' /> },
-					{
-						path: 'kb/:slug',
-						element: <PlaceholderPage titleKey='pages.kbDocument' />,
-					},
+					{ path: 'assistant', element: <AssistantPage /> },
+					{ path: 'kb', element: <KbListPage /> },
+					{ path: 'kb/:slug', element: <KbDocumentPage /> },
 
 					{
 						element: <RequireAbility ability='team' />,
