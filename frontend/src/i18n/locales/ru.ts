@@ -281,6 +281,39 @@ export const ru = {
 		course_assigned: 'Вам назначен курс «{{course_title}}»',
 		course_completed: 'Курс «{{course_title}}» пройден',
 	},
+	team: {
+		title: 'Моя команда',
+		subtitle: 'Заявки и сотрудники, которые вам подчиняются',
+		tabs: {
+			pending: 'Ждут согласования',
+			all: 'Все заявки',
+			employees: 'Сотрудники',
+		},
+		pendingEmpty: 'Нет заявок, ожидающих вашего согласования',
+		pendingEmptyText:
+			'Новые заявки появятся здесь, а уведомление придёт в колокольчик',
+		allEmpty: 'У сотрудников пока нет заявок',
+		employeesEmpty: 'В команде пока нет сотрудников',
+		onVacation: 'В отпуске',
+		available: 'Доступно для отпуска',
+		courses: 'Обучение',
+		coursesProgress: '{{completed}} из {{assigned}} курсов',
+		noCourses: 'Курсы не назначены',
+	},
+	hrQueue: {
+		title: 'Очередь заявок',
+		subtitle: 'Заявки и обращения, которые ждут действия HR',
+		tabs: {
+			queue: 'Требуют действия',
+			all: 'Все заявки',
+		},
+		queueEmpty: 'Очередь пуста',
+		queueEmptyText:
+			'Все заявки обработаны. Новые появятся здесь, а уведомление придёт в колокольчик',
+		allEmpty: 'Заявок пока нет',
+		department: 'Подразделение',
+		allDepartments: 'Все подразделения',
+	},
 };
 
 export type Translation = typeof ru;

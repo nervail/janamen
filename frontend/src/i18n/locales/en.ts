@@ -282,4 +282,37 @@ export const en: Translation = {
 		course_assigned: 'You have been assigned the course "{{course_title}}"',
 		course_completed: 'Course "{{course_title}}" completed',
 	},
+	team: {
+		title: 'My team',
+		subtitle: 'Requests and people who report to you',
+		tabs: {
+			pending: 'Awaiting approval',
+			all: 'All requests',
+			employees: 'Employees',
+		},
+		pendingEmpty: 'No requests are waiting for your approval',
+		pendingEmptyText:
+			'New requests will appear here, and you will get a notification',
+		allEmpty: 'Your team has no requests yet',
+		employeesEmpty: 'There is no one in your team yet',
+		onVacation: 'On vacation',
+		available: 'Available vacation',
+		courses: 'Training',
+		coursesProgress: '{{completed}} of {{assigned}} courses',
+		noCourses: 'No courses assigned',
+	},
+	hrQueue: {
+		title: 'Request queue',
+		subtitle: 'Requests and inquiries waiting for HR action',
+		tabs: {
+			queue: 'Needs action',
+			all: 'All requests',
+		},
+		queueEmpty: 'The queue is empty',
+		queueEmptyText:
+			'All requests are processed. New ones will appear here, and you will get a notification',
+		allEmpty: 'No requests yet',
+		department: 'Department',
+		allDepartments: 'All departments',
+	},
 };
