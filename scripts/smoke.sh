@@ -108,6 +108,30 @@ check "автор не может ответить → 403"       403 forbidden 
 check "HR отвечает → answered"              200 '"status": "answered"' $A hr@janapost.demo POST /api/v1/requests/3/actions '{"action":"answer","answer":"Дата исправлена в 1С"}'
 check "автор получил request_answered"      200 request_answered    $A a.seitkali@janapost.demo GET '/api/v1/notifications?unread=true'
 
+echo "== Роли: команда и HR =="
+ASEL=$($A a.seitkali@janapost.demo GET /api/v1/me | grep -m1 '"id"' | tr -dc '0-9')
+
+check "работник → team/requests 403"          403 forbidden       $A a.seitkali@janapost.demo GET /api/v1/team/requests
+check "работник → hr/requests 403"            403 forbidden       $A a.seitkali@janapost.demo GET /api/v1/hr/requests
+check "руководитель → hr/employees 403"       403 forbidden       $A e.akhmetov@janapost.demo GET /api/v1/hr/employees
+check "HR без подчинённых → team 403"         403 forbidden       $A hr@janapost.demo GET /api/v1/team/employees
+
+check "Ахметов: подчинённые"                  200 'Жумабаев'      $A e.akhmetov@janapost.demo GET /api/v1/team/employees
+check "Ахметов: заявки команды (без обращений)" 200 '"total": 1'  $A e.akhmetov@janapost.demo GET /api/v1/team/requests
+check "Ахметов: ждут согласования — 0"        200 '"total": 0'    $A e.akhmetov@janapost.demo GET '/api/v1/team/requests?status=pending_manager'
+check "руководитель HR видит заявку hr@"      200 'Касымова'      $A hr.head@janapost.demo GET /api/v1/team/requests
+check "руководитель не видит обращение → 403" 403 forbidden       $A e.akhmetov@janapost.demo GET /api/v1/requests/3
+
+check "очередь HR: заявка hr@ видна hr2"      200 awaiting_signature $A hr2@janapost.demo GET '/api/v1/hr/requests?queue=true'
+check "очередь HR: своя заявка не видна"      200 '"total": 0'    $A hr@janapost.demo GET '/api/v1/hr/requests?queue=true'
+check "все заявки (HR)"                       200 '"total": 3'    $A hr@janapost.demo GET /api/v1/hr/requests
+check "сотрудники: 9"                         200 '"total": 9'    $A hr@janapost.demo GET /api/v1/hr/employees
+check "поиск по ФИО"                          200 '"total": 1'    $A hr@janapost.demo GET '/api/v1/hr/employees?search=%D0%9A%D0%B8%D0%BC'
+check "карточка сотрудника"                   200 'Сейткали'      $A hr@janapost.demo GET /api/v1/hr/employees/$ASEL
+check "карточка: нет такого → 404"            404 not_found       $A hr@janapost.demo GET /api/v1/hr/employees/9999
+check "подразделения"                         200 employees_count $A hr@janapost.demo GET /api/v1/hr/departments
+check "журнал: фильтр documentolog"           200 '"total": 2'    $A hr@janapost.demo GET '/api/v1/hr/integration-logs?system=documentolog'
+
 echo
 echo "Журнал интеграций:"
 docker compose exec -T db psql -U janamen -d janamen -c "select system, operation, status, message from integration_logs"

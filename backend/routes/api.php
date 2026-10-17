@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\HrController;
+use App\Http\Controllers\Api\TeamController;
 
 Route::get('/health', function () {
     try {
@@ -47,5 +49,18 @@ Route::prefix('v1')->group(function () {
 
         Route::get('dashboard', [DashboardController::class, 'show']);
         Route::post('profile/corrections', [ProfileController::class, 'corrections']);
+
+        Route::middleware('can:team')->prefix('team')->group(function () {
+            Route::get('employees', [TeamController::class, 'employees']);
+            Route::get('requests', [TeamController::class, 'requests']);
+        });
+
+        Route::middleware('can:hr')->prefix('hr')->group(function () {
+            Route::get('requests', [HrController::class, 'requests']);
+            Route::get('employees', [HrController::class, 'employees']);
+            Route::get('employees/{userId}', [HrController::class, 'employee'])->whereNumber('userId');
+            Route::get('departments', [HrController::class, 'departments']);
+            Route::get('integration-logs', [HrController::class, 'integrationLogs']);
+        });
     });
 });

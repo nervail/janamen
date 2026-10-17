@@ -16,6 +16,8 @@ class HrRequestPolicy
 
         $managerId = $request->author->employee->manager_id;
 
-        return $managerId !== null && $managerId === $user->employee_id;
+        return $request->type !== 'hr_question'
+            && $managerId !== null
+            && $managerId === $user->employee_id;
     }
 }

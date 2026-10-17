@@ -4,6 +4,7 @@ namespace App\Support;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class Paginated
 {
@@ -18,5 +19,10 @@ class Paginated
                 'last_page' => $page->lastPage(),
             ],
         ]);
+    }
+
+    public static function perPage(Request $request): int
+    {
+        return min(max((int) $request->query('per_page', 20), 1), 100);
     }
 }

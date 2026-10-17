@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Integrations\Documentolog\DocumentSigningService;
 use App\Integrations\Documentolog\MockDocumentSigningService;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::define('team', fn (User $user) => $user->hasSubordinates());
+        Gate::define('hr', fn (User $user) => $user->isHr());
+        
         RateLimiter::for('login', fn (Request $request) =>
             Limit::perMinute((int) config('hr.login_rate_limit'))->by($request->ip()));
     }
