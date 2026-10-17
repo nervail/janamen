@@ -270,4 +270,16 @@ export const en: Translation = {
 		cancelButton: 'Cancel',
 		done: 'Done',
 	},
+	notifications: {
+		title: 'Notifications',
+		markAllRead: 'Mark all as read',
+		empty: 'No notifications yet',
+		newToast: 'New notification',
+		unknown: 'New notification',
+		request_created: 'New request #{{request_id}} is waiting for your action',
+		request_status_changed: 'Request #{{request_id}}: {{statusLabel}}',
+		request_answered: 'HR replied to inquiry #{{request_id}}',
+		course_assigned: 'You have been assigned the course "{{course_title}}"',
+		course_completed: 'Course "{{course_title}}" completed',
+	},
 };

@@ -15,3 +15,5 @@ export const formatPeriod = (start: string, end: string) =>
 	start === end
 		? formatShortDate(start)
 		: `${formatShortDate(start)} — ${formatShortDate(end)}`;
+// "5 минут назад", "2 часа назад"
+export const fromNow = (value: string) => dayjs(value).fromNow();

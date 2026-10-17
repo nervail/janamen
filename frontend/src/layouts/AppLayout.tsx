@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import {
-	ActionIcon,
 	AppShell,
 	Avatar,
 	Burger,
 	Container,
 	Group,
-	Indicator,
 	Menu,
 	NavLink,
 	ScrollArea,
@@ -15,18 +13,14 @@ import {
 	UnstyledButton,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import {
-	IconBell,
-	IconChevronDown,
-	IconLogout,
-	IconUser,
-} from '@tabler/icons-react';
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { useLogout, useMe } from '../hooks/useAuth';
 import { getInitials, getShortName } from '../utils/user';
 import { navItems, sectionLabelKeys, type NavSection } from './navigation';
+import { NotificationBell } from '../components/notifications/NotificationBell';
 
 function isActive(pathname: string, path: string) {
 	if (path === '/') return pathname === '/';
@@ -93,16 +87,7 @@ export function AppLayout() {
 					<Group gap='xs' wrap='nowrap'>
 						<LanguageSwitcher />
 
-						<Indicator label='2' size={16} offset={4}>
-							<ActionIcon
-								variant='subtle'
-								color='gray'
-								size='lg'
-								aria-label={t('header.notifications')}
-							>
-								<IconBell size={20} />
-							</ActionIcon>
-						</Indicator>
+						<NotificationBell />
 
 						<Menu position='bottom-end' width={240}>
 							<Menu.Target>

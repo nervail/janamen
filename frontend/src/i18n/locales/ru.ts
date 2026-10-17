@@ -269,6 +269,18 @@ export const ru = {
 		cancelButton: 'Отмена',
 		done: 'Готово',
 	},
+	notifications: {
+		title: 'Уведомления',
+		markAllRead: 'Прочитать все',
+		empty: 'Уведомлений пока нет',
+		newToast: 'Новое уведомление',
+		unknown: 'Новое уведомление',
+		request_created: 'Новая заявка №{{request_id}} ждёт вашего действия',
+		request_status_changed: 'Заявка №{{request_id}}: {{statusLabel}}',
+		request_answered: 'HR ответил на обращение №{{request_id}}',
+		course_assigned: 'Вам назначен курс «{{course_title}}»',
+		course_completed: 'Курс «{{course_title}}» пройден',
+	},
 };
 
 export type Translation = typeof ru;
