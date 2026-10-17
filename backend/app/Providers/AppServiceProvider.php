@@ -37,5 +37,8 @@ class AppServiceProvider extends ServiceProvider
         
         RateLimiter::for('login', fn (Request $request) =>
             Limit::perMinute((int) config('hr.login_rate_limit'))->by($request->ip()));
+
+        RateLimiter::for('ai', fn (Request $request) =>
+            Limit::perMinute((int) config('hr.ai_rate_limit'))->by($request->user()?->id ?: $request->ip()));
     }
 }

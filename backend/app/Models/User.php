@@ -33,4 +33,14 @@ class User extends Authenticatable
     {
         return $this->employee->subordinates()->exists();
     }
+    
+    /** Уровни документов базы знаний, доступные пользователю. */
+    public function kbAccessLevels(): array
+    {
+        if ($this->isHr()) {
+            return ['all', 'manager', 'hr'];
+        }
+
+        return ($this->role === 'manager' || $this->hasSubordinates()) ? ['all', 'manager'] : ['all'];
+    }
 }

@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\HrController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\AcademyController;
 use App\Http\Controllers\Api\HrAcademyController;
+use App\Http\Controllers\Api\AiController;
+use App\Http\Controllers\Api\KbController;
 
 Route::get('/health', function () {
     try {
@@ -58,6 +60,11 @@ Route::prefix('v1')->group(function () {
         Route::post('courses/{courseId}/chapters/{chapterId}/viewed', [AcademyController::class, 'viewed'])->whereNumber(['courseId', 'chapterId']);
         Route::post('courses/{courseId}/chapters/{chapterId}/quiz', [AcademyController::class, 'quiz'])->whereNumber(['courseId', 'chapterId']);
 
+        Route::get('kb/documents', [KbController::class, 'index']);
+        Route::get('kb/documents/{slug}', [KbController::class, 'show']);
+        Route::post('ai/ask', [AiController::class, 'ask'])->middleware('throttle:ai');
+        Route::post('ai/messages/{id}/escalate', [AiController::class, 'escalate'])->whereNumber('id');
+
         Route::middleware('can:team')->prefix('team')->group(function () {
             Route::get('employees', [TeamController::class, 'employees']);
             Route::get('requests', [TeamController::class, 'requests']);
@@ -68,13 +75,15 @@ Route::prefix('v1')->group(function () {
 
             Route::get('employees', [HrController::class, 'employees']);
             Route::get('employees/{userId}', [HrController::class, 'employee'])->whereNumber('userId');
-            
+
             Route::get('departments', [HrController::class, 'departments']);
             Route::get('integration-logs', [HrController::class, 'integrationLogs']);
             Route::get('courses', [HrAcademyController::class, 'courses']);
 
             Route::get('course-assignments', [HrAcademyController::class, 'assignments']);
             Route::post('course-assignments', [HrAcademyController::class, 'assign']);
+
+            Route::get('ai-messages', [HrController::class, 'aiMessages']);
         });
     });
 });

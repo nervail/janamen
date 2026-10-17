@@ -15,6 +15,8 @@ use App\Services\VacationService;
 use App\Support\Paginated;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\AiMessage;
+use App\Support\UserBrief;
 
 class HrController extends Controller
 {
@@ -117,6 +119,24 @@ class HrController extends Controller
             'status' => $l->status,
             'message' => $l->message,
             'created_at' => $l->created_at->toIso8601ZuluString(),
+        ]);
+    }
+
+    public function aiMessages(Request $request): JsonResponse
+    {
+        $page = AiMessage::with('user.employee')
+            ->when($request->query('result'), fn ($q, $v) => $q->where('result', $v))
+            ->orderByDesc('id')
+            ->paginate(Paginated::perPage($request));
+
+        return Paginated::make($page, fn (AiMessage $m) => [
+            'id' => $m->id,
+            'user' => UserBrief::of($m->user),
+            'question' => $m->question,
+            'result' => $m->result,
+            'source_keys' => $m->source_keys,
+            'escalated_request_id' => $m->escalated_request_id,
+            'created_at' => $m->created_at->toIso8601ZuluString(),
         ]);
     }
 }

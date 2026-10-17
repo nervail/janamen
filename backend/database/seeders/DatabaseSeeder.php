@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
         app(EmployeeSyncService::class)->run();  // read-модель employees/departments
         $this->call(UserSeeder::class);          // учётные записи платформы
         $this->call(CourseSeeder::class);
+        $this->call(KbSeeder::class);
     }
 }
