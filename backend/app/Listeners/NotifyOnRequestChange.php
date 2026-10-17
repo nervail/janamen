@@ -9,12 +9,22 @@ use App\Models\User;
 use App\Notifications\RequestNotification;
 use App\Services\RequestWorkflow;
 use Illuminate\Support\Collection;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
-class NotifyOnRequestChange
+class NotifyOnRequestChange implements ShouldHandleEventsAfterCommit
 {
     public function __construct(private RequestWorkflow $workflow) {}
 
     public function handle(RequestStatusChanged $e): void
+    {
+        try {
+            $this->notify($e);
+        } catch (\Throwable $t) {
+            report($t); // переход уже выполнен, ошибка уведомления не должна ломать ответ
+        }
+    }
+
+    private function notify(RequestStatusChanged $e): void
     {
         $request = $e->request->loadMissing('author.employee');
         $author = $request->author;

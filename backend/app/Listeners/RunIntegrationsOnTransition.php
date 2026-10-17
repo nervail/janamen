@@ -21,17 +21,21 @@ class RunIntegrationsOnTransition
 
     public function handle(RequestStatusChanged $e): void
     {
-        $request = $e->request->loadMissing('author.employee');
+        try {
+            $request = $e->request->loadMissing('author.employee');
 
-        if ($request->type !== 'vacation') {
-            return;
+            if ($request->type !== 'vacation') {
+                return;
+            }
+
+            match ($request->status) {
+                S::AWAITING_SIGNATURE => $this->sendForSigning($request),
+                S::APPROVED => $this->sendOrderTo1c($request),
+                default => null,
+            };
+        } catch (Throwable $t) {
+            report($t);
         }
-
-        match ($request->status) {
-            S::AWAITING_SIGNATURE => $this->sendForSigning($request),
-            S::APPROVED => $this->sendOrderTo1c($request),
-            default => null,
-        };
     }
 
     private function sendForSigning(HrRequest $request): void
