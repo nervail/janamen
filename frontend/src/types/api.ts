@@ -147,3 +147,5 @@ export type RequestDetail = RequestItem & {
 	available_actions: RequestAction[];
 	history: HistoryEntry[];
 };
+// Действия, которые можно выполнить через POST /requests/{id}/actions
+export type ExecutableAction = Exclude<RequestAction, 'create'>;
