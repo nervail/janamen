@@ -5,6 +5,8 @@ import { LoginPage } from '../pages/LoginPage';
 import { GuestOnly, RequireAbility, RequireAuth } from './guards';
 import { ProfilePage } from '../pages/profile/ProfilePage';
 import { NewRequestPage } from '../pages/requests/NewRequestPage';
+import { RequestsPage } from '../pages/requests/RequestsPage';
+
 export const router = createBrowserRouter([
 	{
 		element: <GuestOnly />,
@@ -20,10 +22,7 @@ export const router = createBrowserRouter([
 					{ index: true, element: <PlaceholderPage titleKey='pages.home' /> },
 					{ path: 'profile', element: <ProfilePage /> },
 
-					{
-						path: 'requests',
-						element: <PlaceholderPage titleKey='pages.requests' />,
-					},
+					{ path: 'requests', element: <RequestsPage /> },
 					{ path: 'requests/new', element: <NewRequestPage /> },
 					{
 						path: 'requests/:id',

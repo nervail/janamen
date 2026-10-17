@@ -7,3 +7,11 @@ export const formatDateTime = (value: string) =>
 // Календарные дни включительно: со 2 по 15 ноября — 14 дней
 export const countDays = (start: string, end: string) =>
 	dayjs(end).diff(dayjs(start), 'day') + 1;
+export const formatShortDate = (value: string) =>
+	dayjs(value).format('D MMM YYYY');
+
+// "2 нояб. 2026 — 15 нояб. 2026" или одна дата, если отпуск на один день
+export const formatPeriod = (start: string, end: string) =>
+	start === end
+		? formatShortDate(start)
+		: `${formatShortDate(start)} — ${formatShortDate(end)}`;
