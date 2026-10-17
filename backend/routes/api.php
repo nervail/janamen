@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\HrController;
 use App\Http\Controllers\Api\TeamController;
+use App\Http\Controllers\Api\AcademyController;
+use App\Http\Controllers\Api\HrAcademyController;
 
 Route::get('/health', function () {
     try {
@@ -50,6 +52,12 @@ Route::prefix('v1')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'show']);
         Route::post('profile/corrections', [ProfileController::class, 'corrections']);
 
+        Route::get('courses', [AcademyController::class, 'index']);
+        Route::get('courses/{courseId}', [AcademyController::class, 'show'])->whereNumber('courseId');
+        Route::get('courses/{courseId}/chapters/{chapterId}', [AcademyController::class, 'chapter'])->whereNumber(['courseId', 'chapterId']);
+        Route::post('courses/{courseId}/chapters/{chapterId}/viewed', [AcademyController::class, 'viewed'])->whereNumber(['courseId', 'chapterId']);
+        Route::post('courses/{courseId}/chapters/{chapterId}/quiz', [AcademyController::class, 'quiz'])->whereNumber(['courseId', 'chapterId']);
+
         Route::middleware('can:team')->prefix('team')->group(function () {
             Route::get('employees', [TeamController::class, 'employees']);
             Route::get('requests', [TeamController::class, 'requests']);
@@ -57,10 +65,16 @@ Route::prefix('v1')->group(function () {
 
         Route::middleware('can:hr')->prefix('hr')->group(function () {
             Route::get('requests', [HrController::class, 'requests']);
+
             Route::get('employees', [HrController::class, 'employees']);
             Route::get('employees/{userId}', [HrController::class, 'employee'])->whereNumber('userId');
+            
             Route::get('departments', [HrController::class, 'departments']);
             Route::get('integration-logs', [HrController::class, 'integrationLogs']);
+            Route::get('courses', [HrAcademyController::class, 'courses']);
+
+            Route::get('course-assignments', [HrAcademyController::class, 'assignments']);
+            Route::post('course-assignments', [HrAcademyController::class, 'assign']);
         });
     });
 });

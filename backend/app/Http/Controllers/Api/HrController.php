@@ -83,7 +83,7 @@ class HrController extends Controller
 
         return response()->json(['data' => (new ProfileResource($user))->resolve() + [
             'requests' => $requests,
-            'courses' => [], // заполним вместе с Academy
+            'courses' => app(\App\Services\AcademyService::class)->cardsFor($user),
         ]]);
     }
 

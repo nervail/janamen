@@ -45,6 +45,9 @@ class ApiExceptionRenderer
         'max' => 'too_long',
         'in' => 'invalid_value',
         'exists' => 'invalid_value',
+        'requiredwithout' => 'required',
+        'array' => 'invalid_format',
+        'min' => 'invalid_value',
     ];
 
     public static function render(Throwable $e, Request $request): ?JsonResponse

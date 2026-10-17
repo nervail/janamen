@@ -12,5 +12,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MockOnecSeeder::class);      // «сторона 1С»
         app(EmployeeSyncService::class)->run();  // read-модель employees/departments
         $this->call(UserSeeder::class);          // учётные записи платформы
+        $this->call(CourseSeeder::class);
     }
 }

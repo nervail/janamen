@@ -12,6 +12,7 @@ use App\Services\VacationService;
 use App\Support\Paginated;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\CourseAssignment;
 
 class TeamController extends Controller
 {
@@ -34,13 +35,15 @@ class TeamController extends Controller
             ->pluck('author_id')
             ->all();
 
+        $assignments = CourseAssignment::whereIn('user_id', $subordinates->pluck('id'))->get()->groupBy('user_id');
+
         return response()->json(['data' => $subordinates->map(fn (User $u) => [
             'user_id' => $u->id,
             'full_name' => $u->employee->full_name,
             'position' => $u->employee->position,
             'vacation' => $vacation->summary($u),
             'on_vacation_now' => in_array($u->id, $onVacation, true),
-            'courses' => ['assigned' => 0, 'completed' => 0, 'average_progress' => 0], // заполним вместе с Academy
+            'courses' => $this->courseStats($assignments->get($u->id, collect())),
         ])->values()]);
     }
 
@@ -56,5 +59,14 @@ class TeamController extends Controller
             ->paginate(Paginated::perPage($request));
 
         return Paginated::make($page, fn ($r) => (new RequestResource($r))->resolve());
+    }
+
+    private function courseStats(\Illuminate\Support\Collection $items): array
+    {
+        return [
+            'assigned' => $items->count(),
+            'completed' => $items->where('status', 'completed')->count(),
+            'average_progress' => $items->isEmpty() ? 0 : (int) round($items->avg('progress_percent')),
+        ];
     }
 }

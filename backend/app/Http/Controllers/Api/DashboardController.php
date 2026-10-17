@@ -10,10 +10,11 @@ use App\Services\VacationService;
 use App\Support\NotificationPresenter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Services\AcademyService;
 
 class DashboardController extends Controller
 {
-    public function show(Request $request, VacationService $vacation, RequestQueries $queries): JsonResponse
+    public function show(Request $request, VacationService $vacation, RequestQueries $queries, AcademyService $academy): JsonResponse
     {
         $user = $request->user()->loadMissing('employee.department');
         $employee = $user->employee;
@@ -34,7 +35,7 @@ class DashboardController extends Controller
             ],
             'vacation' => $vacation->summary($user),
             'recent_requests' => $recent->map(fn ($r) => (new RequestResource($r))->resolve())->values(),
-            'courses' => [], // заполним вместе с Academy
+            'courses' => $academy->cardsFor($user), 
             'notifications' => [
                 'unread_count' => $user->unreadNotifications()->count(),
                 'latest' => $latest->map(fn ($n) => NotificationPresenter::map($n))->values(),

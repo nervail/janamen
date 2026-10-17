@@ -29,6 +29,13 @@ anon_me() {
   echo "HTTP $c"; cat /tmp/anon.out
 }
 
+# JSON ответов на тест главы: $1 = id главы, $2 = true (верные варианты) или false (неверные)
+quiz_body() {
+  docker compose exec -T db psql -U janamen -d janamen -tA -F, -c \
+    "select distinct on (q.id) q.id, o.id from questions q join options o on o.question_id = q.id where q.chapter_id = $1 and o.is_correct = $2 order by q.id, o.position" \
+  | awk -F, 'BEGIN{printf "{\"answers\":["} {printf "%s{\"question_id\":%s,\"option_id\":%s}", (NR>1?",":""), $1, $2} END{print "]}"}'
+}
+
 VAC='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-02","end_date":"2026-11-15","comment":"Семейная поездка"}}'
 OVERLAP='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-10","end_date":"2026-11-12"}}'
 TOOLONG='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-12-01","end_date":"2026-12-31"}}'
@@ -131,6 +138,38 @@ check "карточка сотрудника"                   200 'Сейтк�
 check "карточка: нет такого → 404"            404 not_found       $A hr@janapost.demo GET /api/v1/hr/employees/9999
 check "подразделения"                         200 employees_count $A hr@janapost.demo GET /api/v1/hr/departments
 check "журнал: фильтр documentolog"           200 '"total": 2'    $A hr@janapost.demo GET '/api/v1/hr/integration-logs?system=documentolog'
+
+echo "== Academy =="
+C=/api/v1/courses
+check "курс не назначен → 404"                404 not_found            $A a.seitkali@janapost.demo GET $C/1
+check "работник не назначает курсы → 403"     403 forbidden            $A a.seitkali@janapost.demo POST /api/v1/hr/course-assignments "{\"course_id\":1,\"user_ids\":[$ASEL]}"
+check "HR назначает курс"                     201 '"created": 1'       $A hr@janapost.demo POST /api/v1/hr/course-assignments "{\"course_id\":1,\"user_ids\":[$ASEL],\"due_date\":\"2026-12-31\"}"
+check "повторное назначение пропущено"        201 '"skipped_already_assigned": 1' $A hr@janapost.demo POST /api/v1/hr/course-assignments "{\"course_id\":1,\"user_ids\":[$ASEL]}"
+check "и user_ids, и department_id → 422"     422 validation_failed    $A hr@janapost.demo POST /api/v1/hr/course-assignments '{"course_id":1,"user_ids":[1],"department_id":1}'
+check "Асель: мои курсы"                      200 'Добро пожаловать'   $A a.seitkali@janapost.demo GET $C
+check "курс: not_started"                     200 '"status": "not_started"' $A a.seitkali@janapost.demo GET $C/1
+check "глава: материал и вопросы"             200 content_md           $A a.seitkali@janapost.demo GET $C/1/chapters/1
+if $A a.seitkali@janapost.demo GET $C/1/chapters/1 | grep -q is_correct; then
+  echo "✘ is_correct попал в ответ"; BAD=$((BAD+1))
+else
+  echo "✔ is_correct не отдаётся"; OK=$((OK+1))
+fi
+check "глава чужого курса → 404"              404 not_found            $A a.seitkali@janapost.demo GET $C/1/chapters/5
+check "«Изучил»"                              200 '"material_viewed": true' $A a.seitkali@janapost.demo POST $C/1/chapters/1/viewed
+check "неполный тест → 422"                   422 incomplete_answers   $A a.seitkali@janapost.demo POST $C/1/chapters/1/quiz '{"answers":[{"question_id":1,"option_id":1}]}'
+check "неверные ответы → не сдан"             200 '"passed": false'    $A a.seitkali@janapost.demo POST $C/1/chapters/1/quiz "$(quiz_body 1 false)"
+check "верные ответы → сдан"                  200 '"passed": true'     $A a.seitkali@janapost.demo POST $C/1/chapters/1/quiz "$(quiz_body 1 true)"
+check "прогресс курса 33%"                    200 '"progress_percent": 33' $A a.seitkali@janapost.demo GET $C/1
+for ch in 2 3; do
+  $A a.seitkali@janapost.demo POST $C/1/chapters/$ch/viewed > /dev/null
+  $A a.seitkali@janapost.demo POST $C/1/chapters/$ch/quiz "$(quiz_body $ch true)" > /dev/null
+done
+check "курс завершён"                         200 '"status": "completed"' $A a.seitkali@janapost.demo GET $C/1
+check "руководитель получил course_completed" 200 course_completed     $A e.akhmetov@janapost.demo GET '/api/v1/notifications?unread=true'
+check "HR: статистика курсов"                 200 '"completed": 1'     $A hr@janapost.demo GET /api/v1/hr/courses
+check "HR: назначения"                        200 '"total": 1'         $A hr@janapost.demo GET /api/v1/hr/course-assignments
+check "дашборд: курсы"                        200 'Добро пожаловать'   $A a.seitkali@janapost.demo GET /api/v1/dashboard
+check "команда: прогресс обучения"            200 '"completed": 1'     $A e.akhmetov@janapost.demo GET /api/v1/team/employees
 
 echo
 echo "Журнал интеграций:"
