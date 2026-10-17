@@ -341,3 +341,46 @@ export interface AssignCourseResult {
 	created: number;
 	skipped_already_assigned: number;
 }
+// База знаний
+export type KbAccessLevel = 'all' | 'manager' | 'hr';
+
+export interface KbDocumentItem {
+	slug: string;
+	language: Locale;
+	title: string;
+	access_level: KbAccessLevel;
+}
+
+export interface KbSection {
+	key: string;
+	anchor: string;
+	title: string;
+	body: string;
+}
+
+export interface KbDocument extends KbDocumentItem {
+	sections: KbSection[];
+}
+
+// AI Jana
+export type AiResult =
+	| 'answered'
+	| 'not_found'
+	| 'invalid_response'
+	| 'unavailable';
+
+export interface AiSource {
+	key: string;
+	document_slug: string;
+	document_title: string;
+	section_title: string;
+	anchor: string;
+}
+
+export interface AiAnswer {
+	message_id: number;
+	result: AiResult;
+	answer: string | null;
+	sources: AiSource[];
+	can_escalate: boolean;
+}

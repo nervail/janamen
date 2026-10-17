@@ -15,8 +15,8 @@
 | `team/employees`, `team/requests`                                                           | ✅     | ✅    | `courses` в `team/employees` пока нули                                                                                                                   |
 | `hr/requests`, `hr/employees`, `hr/employees/{id}`, `hr/departments`, `hr/integration-logs` | ✅     | ✅    | `courses` в карточке сотрудника пока пустой                                                                                                              |
 | `courses/*`, `hr/courses`, `hr/course-assignments` (Academy)                                |        | ✅    |                                                                                                                                                          |
-| `kb/documents*`                                                                             |        |       |                                                                                                                                                          |
-| `ai/ask`, `ai/messages/{id}/escalate`                                                       |        |       |                                                                                                                                                          |
+| `kb/documents*`                                                                             |        | ✅    |                                                                                                                                                          |
+| `ai/ask`, `ai/messages/{id}/escalate`                                                       |        | ✅    |                                                                                                                                                          |
 
 ## Тестовые учётки (пароль у всех `demo-password`, домен `@janapost.demo`)
 
