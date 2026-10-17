@@ -36,6 +36,13 @@ quiz_body() {
   | awk -F, 'BEGIN{printf "{\"answers\":["} {printf "%s{\"question_id\":%s,\"option_id\":%s}", (NR>1?",":""), $1, $2} END{print "]}"}'
 }
 
+# count "описание" "шаблон" ожидаемое команда...: число строк вывода, подходящих под шаблон
+count() {
+  local desc=$1 pat=$2 want=$3; shift 3
+  local got; got=$("$@" 2>&1 | grep -c -- "$pat")
+  if [ "$got" = "$want" ]; then echo "✔ $desc"; OK=$((OK+1)); else echo "✘ $desc (ожидали $want, получили $got)"; BAD=$((BAD+1)); fi
+}
+
 VAC='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-02","end_date":"2026-11-15","comment":"Семейная поездка"}}'
 OVERLAP='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-11-10","end_date":"2026-11-12"}}'
 TOOLONG='{"type":"vacation","payload":{"vacation_type":"annual_paid","start_date":"2026-12-01","end_date":"2026-12-31"}}'
@@ -55,6 +62,7 @@ check "руководитель: team=true"             200 '"team": true'      
 check "HR-специалист: hr=true"              200 '"hr": true'             $A hr@janapost.demo GET /api/v1/me
 check "смена языка"                         200 '"locale": "kz"'         $A a.seitkali@janapost.demo PATCH /api/v1/me '{"locale":"kz"}'
 check "смена языка: невалидное → 422"       422 validation_failed        $A a.seitkali@janapost.demo PATCH /api/v1/me '{"locale":"xx"}'
+check "вернуть язык ru"                     200 '"locale": "ru"'     $A a.seitkali@janapost.demo PATCH /api/v1/me '{"locale":"ru"}'
 
 echo "== Профиль и 1С =="
 check "профиль: руководитель Ахметов"       200 'Ахметов'                $A a.seitkali@janapost.demo GET /api/v1/profile
@@ -170,6 +178,26 @@ check "HR: статистика курсов"                 200 '"completed": 
 check "HR: назначения"                        200 '"total": 1'         $A hr@janapost.demo GET /api/v1/hr/course-assignments
 check "дашборд: курсы"                        200 'Добро пожаловать'   $A a.seitkali@janapost.demo GET /api/v1/dashboard
 check "команда: прогресс обучения"            200 '"completed": 1'     $A e.akhmetov@janapost.demo GET /api/v1/team/employees
+
+echo "== База знаний и AI Jana =="
+K=/api/v1/kb/documents
+count "работник видит 10 документов"           '"slug"' 10 $A a.seitkali@janapost.demo GET $K
+count "руководитель видит 11 документов"       '"slug"' 11 $A e.akhmetov@janapost.demo GET $K
+count "HR видит 12 документов"                 '"slug"' 12 $A hr@janapost.demo GET $K
+check "документ с разделами"                   200 duration            $A a.seitkali@janapost.demo GET $K/vacation-policy
+check "регламент HR для работника → 403"       403 forbidden           $A a.seitkali@janapost.demo GET $K/hr-internal
+check "регламент руководителя для работника → 403" 403 forbidden       $A a.seitkali@janapost.demo GET $K/manager-approval-guide
+check "регламент руководителя → руководителю"  200 reject              $A e.akhmetov@janapost.demo GET $K/manager-approval-guide
+check "нет такого документа → 404"             404 not_found           $A a.seitkali@janapost.demo GET $K/nope
+check "пустой вопрос → 422"                    422 required            $A a.seitkali@janapost.demo POST /api/v1/ai/ask '{"question":""}'
+check "вопрос к AI: ответ получен"             200 message_id          $A a.seitkali@janapost.demo POST /api/v1/ai/ask '{"question":"Сколько дней ежегодного отпуска мне положено?"}'
+MID=$($A a.seitkali@janapost.demo POST /api/v1/ai/ask '{"question":"Какая погода завтра?"}' | grep -m1 '"message_id"' | tr -dc '0-9')
+check "чужое сообщение → 403"                  403 forbidden           $A t.bekov@janapost.demo POST /api/v1/ai/messages/$MID/escalate
+check "эскалация в HR → обращение open"        201 '"status": "open"'  $A a.seitkali@janapost.demo POST /api/v1/ai/messages/$MID/escalate '{"comment":"Нужно уточнить"}'
+check "повторная эскалация → 409"              409 already_escalated   $A a.seitkali@janapost.demo POST /api/v1/ai/messages/$MID/escalate
+check "обращение в очереди HR"                 200 ai_escalation       $A hr@janapost.demo GET '/api/v1/hr/requests?queue=true'
+check "HR: вопросы к AI"                       200 escalated_request_id $A hr@janapost.demo GET /api/v1/hr/ai-messages
+check "работник → hr/ai-messages 403"          403 forbidden           $A a.seitkali@janapost.demo GET /api/v1/hr/ai-messages
 
 echo
 echo "Журнал интеграций:"

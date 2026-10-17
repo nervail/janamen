@@ -9,4 +9,6 @@ return [
     ],
     'timezone' => 'Asia/Almaty',
     'login_rate_limit' => env('LOGIN_RATE_LIMIT', 5),
+    'ai_rate_limit' => env('AI_RATE_LIMIT', 10),
+    'ai_daily_limit' => (int) env('AI_DAILY_LIMIT', 300),
 ];
