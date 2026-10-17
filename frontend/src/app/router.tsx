@@ -10,6 +10,9 @@ import { RequestPage } from '../pages/requests/RequestPage';
 import { TeamPage } from '../pages/team/TeamPage';
 import { HrRequestsPage } from '../pages/hr/HrRequestsPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
+import { MyCoursesPage } from '../pages/academy/MyCoursesPage';
+import { CoursePage } from '../pages/academy/CoursePage';
+import { ChapterPage } from '../pages/academy/ChapterPage';
 
 export const router = createBrowserRouter([
 	{
@@ -30,17 +33,11 @@ export const router = createBrowserRouter([
 					{ path: 'requests/new', element: <NewRequestPage /> },
 					{ path: 'requests/:id', element: <RequestPage /> },
 
-					{
-						path: 'courses',
-						element: <PlaceholderPage titleKey='pages.courses' />,
-					},
-					{
-						path: 'courses/:courseId',
-						element: <PlaceholderPage titleKey='pages.course' />,
-					},
+					{ path: 'courses', element: <MyCoursesPage /> },
+					{ path: 'courses/:courseId', element: <CoursePage /> },
 					{
 						path: 'courses/:courseId/chapters/:chapterId',
-						element: <PlaceholderPage titleKey='pages.chapter' />,
+						element: <ChapterPage />,
 					},
 
 					{

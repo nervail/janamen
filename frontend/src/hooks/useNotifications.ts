@@ -51,11 +51,17 @@ export function useMarkAllNotificationsRead() {
 }
 
 // Текст уведомления на текущем языке
+// Текст уведомления на текущем языке
 export function useNotificationText() {
 	const { t } = useTranslation();
 	return (n: AppNotification) => {
 		const status = n.params.status;
-		return t(`notifications.${n.event}`, {
+		// HR и руководителю бэкенд присылает имя сотрудника, который прошёл курс
+		const key =
+			n.event === 'course_completed' && n.params.employee_name
+				? 'course_completed_by'
+				: n.event;
+		return t(`notifications.${key}`, {
 			...n.params,
 			statusLabel: status ? t(`requestStatus.${status}`) : '',
 			defaultValue: t('notifications.unknown'),

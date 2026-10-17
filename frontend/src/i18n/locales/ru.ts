@@ -97,6 +97,8 @@ export const ru = {
 		invalid_transition:
 			'Статус заявки уже изменился. Мы обновили данные — посмотрите актуальное состояние',
 		comment_required: 'Укажите комментарий',
+		incomplete_answers: 'Ответьте на все вопросы',
+		invalid_option: 'Недопустимый вариант ответа',
 	},
 	profile: {
 		personalData: 'Личные данные',
@@ -280,6 +282,7 @@ export const ru = {
 		request_answered: 'HR ответил на обращение №{{request_id}}',
 		course_assigned: 'Вам назначен курс «{{course_title}}»',
 		course_completed: 'Курс «{{course_title}}» пройден',
+		course_completed_by: 'Курс «{{course_title}}» пройден: {{employee_name}}',
 	},
 	team: {
 		title: 'Моя команда',
@@ -344,6 +347,56 @@ export const ru = {
 		notifications: 'Уведомления',
 		noNotifications: 'Уведомлений пока нет',
 		serviceReport: 'Сообщить о неточности',
+	},
+	academy: {
+		title: 'Мои курсы',
+		subtitle: 'Курсы Jana Academy, назначенные вам',
+		empty: 'Вам пока не назначены курсы',
+		emptyText:
+			'Когда HR назначит курс, он появится здесь, а уведомление придёт в колокольчик',
+		chapters_one: '{{count}} глава',
+		chapters_few: '{{count}} главы',
+		chapters_many: '{{count}} глав',
+		chapters_other: '{{count}} главы',
+		dueDate: 'Пройти до {{date}}',
+		overdue: 'Срок прошёл {{date}}',
+		start: 'Начать',
+		continue: 'Продолжить',
+		review: 'Повторить',
+		open: 'Открыть',
+		status: {
+			not_started: 'Не начат',
+			in_progress: 'В процессе',
+			completed: 'Завершён',
+		},
+		progress: 'Прогресс',
+		backToCourses: 'Мои курсы',
+		backToCourse: 'К курсу',
+		chapters: 'Главы',
+		chapterTitle: 'Глава {{n}}. {{title}}',
+		materialViewed: 'Материал изучен',
+		materialNotViewed: 'Материал не изучен',
+		testPassed: 'Тест сдан · {{score}} из {{max}}',
+		testFailed: 'Тест не сдан',
+		testNotStarted: 'Тест не пройден',
+		courseCompleted: 'Курс пройден!',
+		courseCompletedText:
+			'Все главы засчитаны. HR и ваш руководитель получили уведомление.',
+		markViewed: 'Изучил материал',
+		markViewedHint:
+			'Отметьте, когда прочитаете материал, — после этого откроется тест',
+		quiz: 'Тест',
+		quizHint:
+			'Чтобы глава была засчитана, ответьте правильно минимум на {{threshold}}% вопросов',
+		quizLocked: 'Тест откроется после изучения материала',
+		submitQuiz: 'Проверить ответы',
+		retry: 'Пройти ещё раз',
+		resultPassed: 'Тест сдан: {{score}} из {{max}} ({{percent}}%)',
+		resultFailed:
+			'Тест не сдан: {{score}} из {{max}} ({{percent}}%). Нужно минимум {{threshold}}%',
+		attempts: 'Попыток: {{count}}',
+		chapterDone: 'Глава засчитана · лучший результат {{score}} из {{max}}',
+		nextChapter: 'Следующая глава',
 	},
 };
 
