@@ -186,3 +186,32 @@ export interface Department {
 	parent_id: number | null;
 	employees_count: number;
 }
+export type AssignmentStatus = 'not_started' | 'in_progress' | 'completed';
+
+export interface CourseAssignment {
+	course: {
+		id: number;
+		slug: string;
+		title: string;
+		description: string | null;
+		chapters_count: number;
+	};
+	assignment: {
+		id: number;
+		status: AssignmentStatus;
+		progress_percent: number;
+		due_date: string | null;
+		assigned_at: string;
+		completed_at: string | null;
+	};
+}
+
+export interface Dashboard {
+	profile: { full_name: string; position: string; department: string };
+	vacation: VacationSummary;
+	recent_requests: RequestItem[];
+	courses: CourseAssignment[];
+	notifications: { unread_count: number; latest: AppNotification[] };
+	team_pending_count: number | null;
+	hr_queue_count: number | null;
+}
