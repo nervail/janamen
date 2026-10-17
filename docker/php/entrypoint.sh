@@ -14,7 +14,7 @@ php artisan migrate --force
 # Демо-данные только в пустую базу, чтобы перезапуск не стирал данные
 if [ "$(php artisan tinker --execute='echo \App\Models\User::count();')" = "0" ]; then
   php artisan db:seed --force
-  php artisan db:seed --class=DemoSeeder --force
+  php artisan db:seed --class=DemoSeeder --force || echo "WARN: демо-данные не загружены"
 fi
 
 exec "$@"
