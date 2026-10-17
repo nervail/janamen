@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ru';
 import 'dayjs/locale/kk';
 import 'dayjs/locale/en';
@@ -9,7 +10,7 @@ import 'dayjs/locale/en';
 import { ru } from './locales/ru';
 import { kz } from './locales/kz';
 import { en } from './locales/en';
-
+dayjs.extend(relativeTime);
 export const LANGUAGES = [
 	{ code: 'ru', label: 'Русский', short: 'RU' },
 	{ code: 'kz', label: 'Қазақша', short: 'KZ' },

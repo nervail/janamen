@@ -149,3 +149,25 @@ export type RequestDetail = RequestItem & {
 };
 // Действия, которые можно выполнить через POST /requests/{id}/actions
 export type ExecutableAction = Exclude<RequestAction, 'create'>;
+export type NotificationEvent =
+	| 'request_created'
+	| 'request_status_changed'
+	| 'request_answered'
+	| 'course_assigned'
+	| 'course_completed';
+
+// Не Notification: так называется встроенный тип браузера
+export interface AppNotification {
+	id: string;
+	event: NotificationEvent;
+	message_key: string;
+	params: Record<string, string | number | null>;
+	link: { entity_type: 'request' | 'course'; entity_id: number } | null;
+	read_at: string | null;
+	created_at: string;
+}
+
+export interface UnreadCount {
+	count: number;
+	latest_created_at: string | null;
+}

@@ -270,4 +270,16 @@ export const kz: Translation = {
 		cancelButton: 'Болдырмау',
 		done: 'Дайын',
 	},
+	notifications: {
+		title: 'Хабарламалар',
+		markAllRead: 'Барлығын оқылды деп белгілеу',
+		empty: 'Хабарламалар әлі жоқ',
+		newToast: 'Жаңа хабарлама',
+		unknown: 'Жаңа хабарлама',
+		request_created: 'Жаңа өтінім №{{request_id}} сіздің әрекетіңізді күтуде',
+		request_status_changed: 'Өтінім №{{request_id}}: {{statusLabel}}',
+		request_answered: 'HR №{{request_id}} өтінішке жауап берді',
+		course_assigned: 'Сізге «{{course_title}}» курсы тағайындалды',
+		course_completed: '«{{course_title}}» курсы аяқталды',
+	},
 };
