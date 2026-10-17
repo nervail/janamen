@@ -66,6 +66,7 @@ export function NotificationBell() {
 		void queryClient.invalidateQueries({ queryKey: REQUESTS_QUERY_KEY });
 		void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
 		void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
+		void queryClient.invalidateQueries({ queryKey: ['courses'] });
 
 		void queryClient
 			.fetchQuery({

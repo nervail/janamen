@@ -98,6 +98,8 @@ export const en: Translation = {
 		invalid_transition:
 			'The request status has already changed. We refreshed the data — check the current state',
 		comment_required: 'Please add a comment',
+		incomplete_answers: 'Please answer all questions',
+		invalid_option: 'Invalid answer option',
 	},
 	profile: {
 		personalData: 'Personal data',
@@ -281,6 +283,8 @@ export const en: Translation = {
 		request_answered: 'HR replied to inquiry #{{request_id}}',
 		course_assigned: 'You have been assigned the course "{{course_title}}"',
 		course_completed: 'Course "{{course_title}}" completed',
+		course_completed_by:
+			'Course "{{course_title}}" completed by {{employee_name}}',
 	},
 	team: {
 		title: 'My team',
@@ -345,5 +349,55 @@ export const en: Translation = {
 		notifications: 'Notifications',
 		noNotifications: 'No notifications yet',
 		serviceReport: 'Report an inaccuracy',
+	},
+	academy: {
+		title: 'My courses',
+		subtitle: 'Jana Academy courses assigned to you',
+		empty: 'No courses assigned yet',
+		emptyText:
+			'When HR assigns a course, it will appear here and you will get a notification',
+		chapters_one: '{{count}} chapter',
+		chapters_few: '{{count}} chapters',
+		chapters_many: '{{count}} chapters',
+		chapters_other: '{{count}} chapters',
+		dueDate: 'Due {{date}}',
+		overdue: 'Overdue since {{date}}',
+		start: 'Start',
+		continue: 'Continue',
+		review: 'Review',
+		open: 'Open',
+		status: {
+			not_started: 'Not started',
+			in_progress: 'In progress',
+			completed: 'Completed',
+		},
+		progress: 'Progress',
+		backToCourses: 'My courses',
+		backToCourse: 'Back to course',
+		chapters: 'Chapters',
+		chapterTitle: 'Chapter {{n}}. {{title}}',
+		materialViewed: 'Material studied',
+		materialNotViewed: 'Material not studied',
+		testPassed: 'Test passed · {{score}} of {{max}}',
+		testFailed: 'Test not passed',
+		testNotStarted: 'Test not taken',
+		courseCompleted: 'Course completed!',
+		courseCompletedText:
+			'All chapters are done. HR and your manager have been notified.',
+		markViewed: 'I have studied the material',
+		markViewedHint:
+			'Mark it when you finish reading — the test will open after that',
+		quiz: 'Test',
+		quizHint:
+			'To complete the chapter, answer at least {{threshold}}% of the questions correctly',
+		quizLocked: 'The test opens after you study the material',
+		submitQuiz: 'Check answers',
+		retry: 'Try again',
+		resultPassed: 'Test passed: {{score}} of {{max}} ({{percent}}%)',
+		resultFailed:
+			'Test not passed: {{score}} of {{max}} ({{percent}}%). At least {{threshold}}% is required',
+		attempts: 'Attempts: {{count}}',
+		chapterDone: 'Chapter completed · best result {{score}} of {{max}}',
+		nextChapter: 'Next chapter',
 	},
 };

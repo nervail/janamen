@@ -98,6 +98,8 @@ export const kz: Translation = {
 		invalid_transition:
 			'Өтінім мәртебесі өзгеріп кетті. Деректер жаңартылды — өзекті күйін қараңыз',
 		comment_required: 'Түсініктеме жазыңыз',
+		incomplete_answers: 'Барлық сұрақтарға жауап беріңіз',
+		invalid_option: 'Жарамсыз жауап нұсқасы',
 	},
 	profile: {
 		personalData: 'Жеке деректер',
@@ -272,6 +274,7 @@ export const kz: Translation = {
 	},
 	notifications: {
 		title: 'Хабарламалар',
+		course_completed_by: '«{{course_title}}» курсы аяқталды: {{employee_name}}',
 		markAllRead: 'Барлығын оқылды деп белгілеу',
 		empty: 'Хабарламалар әлі жоқ',
 		newToast: 'Жаңа хабарлама',
@@ -345,5 +348,57 @@ export const kz: Translation = {
 		notifications: 'Хабарламалар',
 		noNotifications: 'Хабарламалар әлі жоқ',
 		serviceReport: 'Дәлсіздік туралы хабарлау',
+	},
+	academy: {
+		title: 'Менің курстарым',
+		subtitle: 'Сізге тағайындалған Jana Academy курстары',
+		empty: 'Сізге әлі курстар тағайындалмаған',
+		emptyText:
+			'HR курс тағайындағанда, ол осында пайда болады, ал хабарлама қоңыраушаға келеді',
+		chapters_one: '{{count}} тарау',
+		chapters_few: '{{count}} тарау',
+		chapters_many: '{{count}} тарау',
+		chapters_other: '{{count}} тарау',
+		dueDate: '{{date}} дейін өту',
+		overdue: 'Мерзімі өтті: {{date}}',
+		start: 'Бастау',
+		continue: 'Жалғастыру',
+		review: 'Қайталау',
+		open: 'Ашу',
+		status: {
+			not_started: 'Басталмаған',
+			in_progress: 'Өтуде',
+			completed: 'Аяқталды',
+		},
+		progress: 'Прогресс',
+		backToCourses: 'Менің курстарым',
+		backToCourse: 'Курсқа',
+		chapters: 'Тараулар',
+		chapterTitle: '{{n}}-тарау. {{title}}',
+		materialViewed: 'Материал оқылды',
+		materialNotViewed: 'Материал оқылмаған',
+		testPassed: 'Тест тапсырылды · {{max}} сұрақтың {{score}}-і',
+		testFailed: 'Тест тапсырылмады',
+		testNotStarted: 'Тест өтілмеген',
+		courseCompleted: 'Курс аяқталды!',
+		courseCompletedText:
+			'Барлық тараулар есептелді. HR мен басшыңыз хабарлама алды.',
+		markViewed: 'Материалды оқыдым',
+		markViewedHint:
+			'Материалды оқып болған соң белгілеңіз — содан кейін тест ашылады',
+		quiz: 'Тест',
+		quizHint:
+			'Тарау есептелуі үшін сұрақтардың кемінде {{threshold}}%-на дұрыс жауап беріңіз',
+		quizLocked: 'Тест материалды оқығаннан кейін ашылады',
+		submitQuiz: 'Жауаптарды тексеру',
+		retry: 'Қайта өту',
+		resultPassed:
+			'Тест тапсырылды: {{max}} сұрақтың {{score}}-і ({{percent}}%)',
+		resultFailed:
+			'Тест тапсырылмады: {{max}} сұрақтың {{score}}-і ({{percent}}%). Кемінде {{threshold}}% қажет',
+		attempts: 'Әрекеттер: {{count}}',
+		chapterDone:
+			'Тарау есептелді · ең жақсы нәтиже: {{max}} сұрақтың {{score}}-і',
+		nextChapter: 'Келесі тарау',
 	},
 };

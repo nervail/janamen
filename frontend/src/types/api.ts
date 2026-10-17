@@ -215,3 +215,69 @@ export interface Dashboard {
 	team_pending_count: number | null;
 	hr_queue_count: number | null;
 }
+export interface ChapterState {
+	material_viewed: boolean;
+	passed: boolean;
+	completed: boolean;
+}
+
+export interface CourseChapter extends ChapterState {
+	id: number;
+	position: number;
+	title: string;
+	last_score: number | null;
+	max_score: number;
+	attempts: number;
+}
+
+export interface CourseDetail {
+	id: number;
+	title: string;
+	description: string | null;
+	assignment: CourseAssignment['assignment'];
+	chapters: CourseChapter[];
+}
+
+export interface QuizQuestion {
+	id: number;
+	position: number;
+	text: string;
+	options: { id: number; position: number; text: string }[];
+}
+
+export interface ChapterDetail {
+	id: number;
+	course_id: number;
+	position: number;
+	title: string;
+	content_md: string;
+	pass_threshold: number;
+	questions: QuizQuestion[];
+	progress: {
+		material_viewed: boolean;
+		passed: boolean;
+		last_score: number | null;
+		max_score: number;
+		attempts: number;
+	};
+}
+
+export interface QuizAnswer {
+	question_id: number;
+	option_id: number;
+}
+
+export interface QuizResult {
+	score: number;
+	max_score: number;
+	percent: number;
+	threshold: number;
+	passed: boolean;
+	attempts: number;
+	chapter: { id: number } & ChapterState;
+	course: {
+		status: AssignmentStatus;
+		progress_percent: number;
+		completed_at: string | null;
+	};
+}
