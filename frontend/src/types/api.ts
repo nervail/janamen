@@ -281,3 +281,63 @@ export interface QuizResult {
 		completed_at: string | null;
 	};
 }
+
+// HR: Jana Academy
+export interface HrCourse {
+	id: number;
+	slug: string;
+	title: string;
+	chapters_count: number;
+	stats: {
+		assigned: number;
+		not_started: number;
+		in_progress: number;
+		completed: number;
+	};
+}
+
+export interface HrCourseAssignment {
+	id: number;
+	course: { id: number; title: string };
+	user: UserBrief;
+	status: AssignmentStatus;
+	progress_percent: number;
+	due_date: string | null;
+	completed_at: string | null;
+}
+
+export interface HrAssignmentListParams {
+	course_id?: number;
+	status?: AssignmentStatus;
+	department_id?: number;
+	page?: number;
+	per_page?: number;
+}
+
+export interface HrEmployee {
+	user_id: number;
+	employee_id: number;
+	full_name: string;
+	position: string;
+	department: { id: number; name: string };
+	role: Role;
+	vacation: VacationSummary;
+}
+
+export interface HrEmployeeListParams {
+	search?: string;
+	department_id?: number;
+	page?: number;
+	per_page?: number;
+}
+
+// Передаётся ровно одно из user_ids / department_id
+export type AssignCoursePayload = {
+	course_id: number;
+	due_date: string | null;
+} & ({ user_ids: number[] } | { department_id: number });
+
+export interface AssignCourseResult {
+	created: number;
+	skipped_already_assigned: number;
+}

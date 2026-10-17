@@ -2,7 +2,7 @@ import { Badge, type BadgeProps } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import type { RequestStatus } from '../../types/api';
 
-export const STATUS_COLORS: Record<RequestStatus, string> = {
+const STATUS_COLORS: Record<RequestStatus, string> = {
 	pending_manager: 'yellow',
 	pending_hr: 'orange',
 	awaiting_signature: 'blue',

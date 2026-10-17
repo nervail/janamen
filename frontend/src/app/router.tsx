@@ -13,6 +13,7 @@ import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { MyCoursesPage } from '../pages/academy/MyCoursesPage';
 import { CoursePage } from '../pages/academy/CoursePage';
 import { ChapterPage } from '../pages/academy/ChapterPage';
+import { HrCoursesPage } from '../pages/hr/academy/HrCoursesPage';
 
 export const router = createBrowserRouter([
 	{
@@ -68,10 +69,7 @@ export const router = createBrowserRouter([
 								path: 'employees/:userId',
 								element: <PlaceholderPage titleKey='pages.hrEmployee' />,
 							},
-							{
-								path: 'courses',
-								element: <PlaceholderPage titleKey='pages.hrCourses' />,
-							},
+							{ path: 'courses', element: <HrCoursesPage /> },
 							{
 								path: 'integrations',
 								element: <PlaceholderPage titleKey='pages.hrIntegrations' />,
