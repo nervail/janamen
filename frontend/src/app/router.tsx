@@ -9,6 +9,7 @@ import { RequestsPage } from '../pages/requests/RequestsPage';
 import { RequestPage } from '../pages/requests/RequestPage';
 import { TeamPage } from '../pages/team/TeamPage';
 import { HrRequestsPage } from '../pages/hr/HrRequestsPage';
+import { DashboardPage } from '../pages/dashboard/DashboardPage';
 
 export const router = createBrowserRouter([
 	{
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
 				path: '/',
 				element: <AppLayout />,
 				children: [
-					{ index: true, element: <PlaceholderPage titleKey='pages.home' /> },
+					{ index: true, element: <DashboardPage /> },
 					{ path: 'profile', element: <ProfilePage /> },
 
 					{ path: 'requests', element: <RequestsPage /> },
