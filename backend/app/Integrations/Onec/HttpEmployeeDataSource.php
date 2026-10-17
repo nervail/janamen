@@ -17,4 +17,13 @@ class HttpEmployeeDataSource implements EmployeeDataSource
             ->throw()
             ->json('employees', []);
     }
+
+    public function sendVacationOrder(array $order): array
+    {
+        return Http::withHeaders(['X-Integration-Token' => $this->token])
+            ->timeout(10)
+            ->post(rtrim($this->baseUrl, '/') . '/vacation-orders', $order)
+            ->throw()
+            ->json();
+    }
 }

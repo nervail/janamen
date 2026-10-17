@@ -76,6 +76,17 @@ check "HR одобрил → awaiting_signature"     200 awaiting_signature     
 check "подпись → approved"                  200 '"status": "approved"'   $A hr@janapost.demo POST /api/v1/requests/1/actions '{"action":"sign"}'
 check "история: 4 записи"                   200 '"action": "sign"'       $A a.seitkali@janapost.demo GET /api/v1/requests/1
 
+echo "== Интеграции и уведомления =="
+check "подпись → остаток в 1С уменьшился"   200 '"balance_days": 10'    $A a.seitkali@janapost.demo GET /api/v1/profile
+check "document_ref заполнен (Documentolog)" 200 'DOC-'                  $A a.seitkali@janapost.demo GET /api/v1/requests/1
+check "Асель: 3 непрочитанных"              200 '"count": 3'            $A a.seitkali@janapost.demo GET /api/v1/notifications/unread-count
+check "Асель: список уведомлений"           200 request_status_changed  $A a.seitkali@janapost.demo GET '/api/v1/notifications?unread=true'
+check "Ахметов: 1 уведомление о заявке"     200 '"count": 1'            $A e.akhmetov@janapost.demo GET /api/v1/notifications/unread-count
+check "hr2 получил уведомление об очереди"  200 '"count": 1'            $A hr2@janapost.demo GET /api/v1/notifications/unread-count
+check "прочитать все → 204"                 204 ''                      $A a.seitkali@janapost.demo POST /api/v1/notifications/read-all
+check "после этого счётчик 0"               200 '"count": 0'            $A a.seitkali@janapost.demo GET /api/v1/notifications/unread-count
+check "прочитать не-uuid → 404"             404 not_found               $A a.seitkali@janapost.demo POST /api/v1/notifications/abc/read
+
 echo "== Правило «двух ключей» (заявка HR-специалиста) =="
 check "HR создал свою заявку (pending_manager)" 201 pending_manager      $A hr@janapost.demo POST /api/v1/requests "$HRVAC"
 check "HR согласует свою → self_approval_forbidden" 403 self_approval_forbidden $A hr@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_approve"}'

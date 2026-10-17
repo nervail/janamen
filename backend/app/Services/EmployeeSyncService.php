@@ -81,4 +81,19 @@ class EmployeeSyncService
                 ->update(['manager_id' => $manager ? $empIds[$manager] : null]);
         }
     }
+
+    public function syncOne(string $externalId): void
+    {
+        $items = array_values(array_filter(
+            $this->source->fetchEmployees(),
+            fn ($i) => $i['external_id'] === $externalId,
+        ));
+
+        DB::transaction(fn () => $this->apply($items));
+
+        IntegrationLog::create([
+            'system' => 'onec_zup', 'direction' => 'inbound', 'operation' => 'sync_employee',
+            'status' => 'success', 'message' => "Обновлены данные сотрудника {$externalId}",
+        ]);
+    }
 }

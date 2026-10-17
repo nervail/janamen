@@ -10,4 +10,7 @@ interface EmployeeDataSource
      * @return array<int, array<string, mixed>>
      */
     public function fetchEmployees(): array;
+
+    /** Передаёт приказ об отпуске. Возвращает ['order_id' => ..., 'vacation_balance_days' => ...]. */
+    public function sendVacationOrder(array $order): array;
 }

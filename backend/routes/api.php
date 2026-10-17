@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RequestController;
+use App\Http\Controllers\Api\NotificationController;
+
 
 Route::get('/health', function () {
     try {
@@ -37,5 +39,10 @@ Route::prefix('v1')->group(function () {
         Route::post('requests', [RequestController::class, 'store']);
         Route::get('requests/{id}', [RequestController::class, 'show'])->whereNumber('id');
         Route::post('requests/{id}/actions', [RequestController::class, 'action'])->whereNumber('id');
+
+        Route::get('notifications', [NotificationController::class, 'index']);
+        Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
+        Route::post('notifications/read-all', [NotificationController::class, 'readAll']);
+        Route::post('notifications/{id}/read', [NotificationController::class, 'read']);
     });
 });

@@ -9,6 +9,8 @@ use App\Integrations\Onec\MockEmployeeDataSource;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use App\Integrations\Documentolog\DocumentSigningService;
+use App\Integrations\Documentolog\MockDocumentSigningService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(DocumentSigningService::class, MockDocumentSigningService::class);
         $this->app->bind(EmployeeDataSource::class, fn () => config('hr.source') === 'http'
             ? new HttpEmployeeDataSource((string) config('hr.onec.url'), (string) config('hr.onec.token'))
             : new MockEmployeeDataSource());
