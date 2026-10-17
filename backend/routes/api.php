@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\MeController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\RequestController;
 use App\Http\Controllers\Api\NotificationController;
-
+use App\Http\Controllers\Api\DashboardController;
 
 Route::get('/health', function () {
     try {
@@ -44,5 +44,8 @@ Route::prefix('v1')->group(function () {
         Route::get('notifications/unread-count', [NotificationController::class, 'unreadCount']);
         Route::post('notifications/read-all', [NotificationController::class, 'readAll']);
         Route::post('notifications/{id}/read', [NotificationController::class, 'read']);
+
+        Route::get('dashboard', [DashboardController::class, 'show']);
+        Route::post('profile/corrections', [ProfileController::class, 'corrections']);
     });
 });

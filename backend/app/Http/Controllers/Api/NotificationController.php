@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Str;
+use App\Support\NotificationPresenter;
 
 class NotificationController extends Controller
 {
@@ -21,7 +22,7 @@ class NotificationController extends Controller
             ->orderByDesc('created_at')
             ->paginate($perPage);
 
-        return Paginated::make($page, fn (DatabaseNotification $n) => $this->map($n));
+        return Paginated::make($page, fn (DatabaseNotification $n) => NotificationPresenter::map($n));
     }
 
     public function unreadCount(Request $request): JsonResponse
@@ -48,13 +49,5 @@ class NotificationController extends Controller
         $request->user()->unreadNotifications()->update(['read_at' => now()]);
 
         return response()->noContent();
-    }
-
-    private function map(DatabaseNotification $n): array
-    {
-        return ['id' => $n->id] + $n->data + [
-            'read_at' => $n->read_at?->toIso8601ZuluString(),
-            'created_at' => $n->created_at->toIso8601ZuluString(),
-        ];
     }
 }

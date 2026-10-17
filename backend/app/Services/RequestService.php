@@ -121,4 +121,41 @@ class RequestService
             throw new ApiException('no_available_approver', 422);
         }
     }
+
+    public function createHrQuestion(User $author, string $topic, string $question, ?int $aiMessageId = null): HrRequest
+    {
+        // Некому ответить, если нет HR, кроме самого автора
+        if (! User::where('role', 'hr')->where('id', '!=', $author->id)->exists()) {
+            throw new ApiException('no_available_approver', 422);
+        }
+
+        [$request, $entry] = DB::transaction(function () use ($author, $topic, $question, $aiMessageId) {
+            $request = HrRequest::create([
+                'type' => 'hr_question',
+                'author_id' => $author->id,
+                'status' => RequestStatus::OPEN,
+                'payload' => [
+                    'topic' => $topic,
+                    'question' => $question,
+                    'ai_message_id' => $aiMessageId,
+                    'answer' => null,
+                    'answered_by' => null,
+                    'answered_at' => null,
+                ],
+            ]);
+
+            $entry = $request->history()->create([
+                'from_status' => null,
+                'to_status' => RequestStatus::OPEN,
+                'action' => RequestAction::CREATE,
+                'actor_id' => $author->id,
+            ]);
+
+            return [$request, $entry];
+        });
+
+        event(new RequestStatusChanged($request, $entry));
+
+        return $request;
+    }
 }

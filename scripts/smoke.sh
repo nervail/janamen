@@ -62,6 +62,10 @@ check "пересечение дат → dates_overlap"     422 dates_overlap   
 check "мало дней → insufficient_balance"    422 insufficient_balance     $A a.seitkali@janapost.demo POST /api/v1/requests "$TOOLONG"
 check "дата в прошлом → date_in_past"       422 date_in_past             $A a.seitkali@janapost.demo POST /api/v1/requests "$PAST"
 check "список моих заявок"                  200 '"total": 1'             $A a.seitkali@janapost.demo GET /api/v1/requests
+check "дашборд руководителя: 1 ждёт согласования" 200 '"team_pending_count": 1'  $A e.akhmetov@janapost.demo GET /api/v1/dashboard
+check "дашборд работника: team_pending_count null" 200 '"team_pending_count": null' $A a.seitkali@janapost.demo GET /api/v1/dashboard
+check "дашборд работника: последние заявки"       200 '"recent_requests"'        $A a.seitkali@janapost.demo GET /api/v1/dashboard
+check "дашборд HR: очередь пока пуста"            200 '"hr_queue_count": 0'      $A hr@janapost.demo GET /api/v1/dashboard
 
 echo "== Права доступа =="
 check "чужая заявка → 403"                  403 forbidden                $A t.bekov@janapost.demo GET /api/v1/requests/1
@@ -95,6 +99,14 @@ check "руководитель HR согласовал"          200 pending_hr
 check "он же второй шаг → already_participated" 403 already_participated $A hr.head@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_approve"}'
 check "другой HR: reject без комментария"   422 comment_required         $A hr2@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_reject"}'
 check "другой HR одобряет"                  200 awaiting_signature       $A hr2@janapost.demo POST /api/v1/requests/2/actions '{"action":"hr_approve"}'
+
+echo "== Обращения в HR =="
+check "обращение создано (open)"            201 '"status": "open"'  $A a.seitkali@janapost.demo POST /api/v1/profile/corrections '{"message":"Неверно указана дата приёма"}'
+check "пустое обращение → 422"              422 required            $A a.seitkali@janapost.demo POST /api/v1/profile/corrections '{"message":""}'
+check "HR видит действие answer"            200 '^ *"answer"$'      $A hr@janapost.demo GET /api/v1/requests/3
+check "автор не может ответить → 403"       403 forbidden           $A a.seitkali@janapost.demo POST /api/v1/requests/3/actions '{"action":"answer","answer":"x"}'
+check "HR отвечает → answered"              200 '"status": "answered"' $A hr@janapost.demo POST /api/v1/requests/3/actions '{"action":"answer","answer":"Дата исправлена в 1С"}'
+check "автор получил request_answered"      200 request_answered    $A a.seitkali@janapost.demo GET '/api/v1/notifications?unread=true'
 
 echo
 echo "Журнал интеграций:"
