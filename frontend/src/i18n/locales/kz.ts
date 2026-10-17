@@ -282,4 +282,37 @@ export const kz: Translation = {
 		course_assigned: 'Сізге «{{course_title}}» курсы тағайындалды',
 		course_completed: '«{{course_title}}» курсы аяқталды',
 	},
+	team: {
+		title: 'Менің командам',
+		subtitle: 'Сізге бағынатын қызметкерлер мен олардың өтінімдері',
+		tabs: {
+			pending: 'Келісуді күтуде',
+			all: 'Барлық өтінімдер',
+			employees: 'Қызметкерлер',
+		},
+		pendingEmpty: 'Келісуіңізді күтіп тұрған өтінімдер жоқ',
+		pendingEmptyText:
+			'Жаңа өтінімдер осында пайда болады, ал хабарлама қоңыраушаға келеді',
+		allEmpty: 'Қызметкерлерде әлі өтінім жоқ',
+		employeesEmpty: 'Командада әлі қызметкерлер жоқ',
+		onVacation: 'Демалыста',
+		available: 'Демалысқа қолжетімді',
+		courses: 'Оқыту',
+		coursesProgress: '{{assigned}} курстың {{completed}}-і',
+		noCourses: 'Курстар тағайындалмаған',
+	},
+	hrQueue: {
+		title: 'Өтінімдер кезегі',
+		subtitle: 'HR әрекетін күтіп тұрған өтінімдер мен өтініштер',
+		tabs: {
+			queue: 'Әрекет қажет',
+			all: 'Барлық өтінімдер',
+		},
+		queueEmpty: 'Кезек бос',
+		queueEmptyText:
+			'Барлық өтінімдер өңделді. Жаңалары осында пайда болады, ал хабарлама қоңыраушаға келеді',
+		allEmpty: 'Әлі өтінімдер жоқ',
+		department: 'Бөлімше',
+		allDepartments: 'Барлық бөлімшелер',
+	},
 };

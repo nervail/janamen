@@ -7,6 +7,8 @@ import { ProfilePage } from '../pages/profile/ProfilePage';
 import { NewRequestPage } from '../pages/requests/NewRequestPage';
 import { RequestsPage } from '../pages/requests/RequestsPage';
 import { RequestPage } from '../pages/requests/RequestPage';
+import { TeamPage } from '../pages/team/TeamPage';
+import { HrRequestsPage } from '../pages/hr/HrRequestsPage';
 
 export const router = createBrowserRouter([
 	{
@@ -52,22 +54,14 @@ export const router = createBrowserRouter([
 
 					{
 						element: <RequireAbility ability='team' />,
-						children: [
-							{
-								path: 'team',
-								element: <PlaceholderPage titleKey='pages.team' />,
-							},
-						],
+						children: [{ path: 'team', element: <TeamPage /> }],
 					},
 
 					{
 						path: 'hr',
 						element: <RequireAbility ability='hr' />,
 						children: [
-							{
-								path: 'requests',
-								element: <PlaceholderPage titleKey='pages.hrRequests' />,
-							},
+							{ path: 'requests', element: <HrRequestsPage /> },
 							{
 								path: 'employees',
 								element: <PlaceholderPage titleKey='pages.hrEmployees' />,

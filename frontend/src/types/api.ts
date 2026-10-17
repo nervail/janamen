@@ -171,3 +171,18 @@ export interface UnreadCount {
 	count: number;
 	latest_created_at: string | null;
 }
+export interface TeamEmployee {
+	user_id: number;
+	full_name: string;
+	position: string;
+	vacation: VacationSummary;
+	on_vacation_now: boolean;
+	courses: { assigned: number; completed: number; average_progress: number };
+}
+
+export interface Department {
+	id: number;
+	name: string;
+	parent_id: number | null;
+	employees_count: number;
+}

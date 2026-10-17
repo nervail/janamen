@@ -69,3 +69,25 @@ export async function performRequestAction(
 	);
 	return data.data;
 }
+export async function fetchTeamRequests(
+	params: RequestListParams,
+): Promise<Paginated<RequestItem>> {
+	const { data } = await api.get<Paginated<RequestItem>>('/team/requests', {
+		params,
+	});
+	return data;
+}
+
+export interface HrRequestListParams extends RequestListParams {
+	queue?: boolean;
+	department_id?: number;
+}
+
+export async function fetchHrRequests(
+	params: HrRequestListParams,
+): Promise<Paginated<RequestItem>> {
+	const { data } = await api.get<Paginated<RequestItem>>('/hr/requests', {
+		params: { ...params, queue: params.queue ? 1 : undefined },
+	});
+	return data;
+}

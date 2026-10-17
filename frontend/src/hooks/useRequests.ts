@@ -11,8 +11,11 @@ import {
 	performRequestAction,
 	requestQueryKey,
 	REQUESTS_QUERY_KEY,
+	fetchTeamRequests,
+	fetchHrRequests,
 	type RequestActionInput,
 	type RequestListParams,
+	type HrRequestListParams,
 } from '../api/requests';
 import { ApiError } from '../api/client';
 import { PROFILE_QUERY_KEY } from '../api/profile';
@@ -58,6 +61,7 @@ export function useRequestAction(id: number) {
 			void queryClient.invalidateQueries({ queryKey: PROFILE_QUERY_KEY });
 			void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
 			void queryClient.invalidateQueries({ queryKey: ['notifications'] });
+			void queryClient.invalidateQueries({ queryKey: ['team'] });
 		},
 		onError: error => {
 			// 409: заявку уже изменил кто-то другой — подтягиваем актуальное состояние
@@ -65,5 +69,22 @@ export function useRequestAction(id: number) {
 				void queryClient.invalidateQueries({ queryKey: requestQueryKey(id) });
 			}
 		},
+	});
+}
+export function useTeamRequests(params: RequestListParams, enabled = true) {
+	return useQuery({
+		queryKey: [...REQUESTS_QUERY_KEY, 'team', params],
+		queryFn: () => fetchTeamRequests(params),
+		placeholderData: keepPreviousData,
+		enabled,
+	});
+}
+
+export function useHrRequests(params: HrRequestListParams, enabled = true) {
+	return useQuery({
+		queryKey: [...REQUESTS_QUERY_KEY, 'hr', params],
+		queryFn: () => fetchHrRequests(params),
+		placeholderData: keepPreviousData,
+		enabled,
 	});
 }
