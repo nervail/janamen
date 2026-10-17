@@ -4,3 +4,6 @@ import dayjs from 'dayjs';
 export const formatDate = (value: string) => dayjs(value).format('D MMMM YYYY');
 export const formatDateTime = (value: string) =>
 	dayjs(value).format('D MMMM YYYY, HH:mm');
+// Календарные дни включительно: со 2 по 15 ноября — 14 дней
+export const countDays = (start: string, end: string) =>
+	dayjs(end).diff(dayjs(start), 'day') + 1;

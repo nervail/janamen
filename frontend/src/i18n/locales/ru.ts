@@ -82,6 +82,15 @@ export const ru = {
 		too_long: 'Слишком длинный текст',
 		forbidden: 'Недостаточно прав',
 		not_found: 'Не найдено',
+		validation_failed: 'Проверьте заполнение полей',
+		invalid_value: 'Недопустимое значение',
+		invalid_format: 'Неверный формат',
+		date_in_past: 'Дата начала уже прошла',
+		end_before_start: 'Дата окончания раньше даты начала',
+		dates_overlap: 'Период пересекается с другой вашей заявкой',
+		insufficient_balance: 'Недостаточно дней отпуска',
+		no_available_approver:
+			'Нет доступного согласующего. Обратитесь к администратору',
 	},
 	profile: {
 		personalData: 'Личные данные',
@@ -118,6 +127,34 @@ export const ru = {
 			success: 'Обращение отправлено в HR',
 			successText: 'Ответ придёт в уведомлениях',
 		},
+	},
+	requests: {
+		newVacationTitle: 'Заявка на отпуск',
+		newVacationSubtitle:
+			'Укажите тип и период отпуска. Заявка автоматически уйдёт на согласование.',
+		vacationType: 'Тип отпуска',
+		vacationTypes: {
+			annual_paid: 'Ежегодный оплачиваемый',
+			unpaid: 'Без сохранения содержания',
+		},
+		period: 'Период',
+		periodPlaceholder: 'Выберите даты начала и окончания',
+		comment: 'Комментарий',
+		commentPlaceholder: 'Необязательно. Например: семейная поездка',
+		submit: 'Отправить заявку',
+		cancel: 'Отмена',
+		summary: 'Итого',
+		daysSelected: 'Выбрано',
+		availableNow: 'Доступно сейчас',
+		remainingAfter: 'Останется после заявки',
+		notSelected: 'Период не выбран',
+		unpaidHint:
+			'Отпуск без сохранения содержания не уменьшает остаток ежегодного отпуска',
+		route: 'Маршрут согласования',
+		routeHr: 'HR-отдел',
+		routeSignature: 'Подписание документов',
+		created: 'Заявка отправлена',
+		createdText: 'Статус можно отслеживать в разделе «Мои заявки»',
 	},
 };
 
