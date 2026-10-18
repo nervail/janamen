@@ -383,6 +383,7 @@ export interface AiAnswer {
 	answer: string | null;
 	sources: AiSource[];
 	can_escalate: boolean;
+	note: string | null;
 }
 // Карточка сотрудника для HR: профиль из 1С + его заявки и курсы
 export type HrEmployeeDetail = Profile & {

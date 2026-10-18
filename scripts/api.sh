@@ -33,8 +33,17 @@ if [ ! -f "$JAR" ]; then
   [ -f "$JAR" ] || { echo "HTTP 000"; echo "login failed for $EMAIL (429 из-за лимита? проверь LOGIN_RATE_LIMIT)"; exit 1; }
 fi
 
-ARGS=(-s -b "$JAR" -c "$JAR" "${HDR[@]}" -H "X-XSRF-TOKEN: $(xsrf)" -X "$METHOD")
-[ -n "$BODY" ] && ARGS+=(-d "$BODY")
+request() {
+  local args=(-s -b "$JAR" -c "$JAR" "${HDR[@]}" -H "X-XSRF-TOKEN: $(xsrf)" -X "$METHOD")
+  [ -n "$BODY" ] && args+=(-d "$BODY")
+  curl "${args[@]}" -o "$OUT" -w "%{http_code}" "$BASE$URLPATH"
+}
+
 OUT=$(mktemp)
-CODE=$(curl "${ARGS[@]}" -o "$OUT" -w "%{http_code}" "$BASE$URLPATH")
+CODE=$(request)
+# Сессия в cookie-файле устарела (истекла или база пересоздана) — входим заново и повторяем один раз
+if [ "$CODE" = "419" ] || [ "$CODE" = "401" ]; then
+  do_login > /dev/null
+  [ -f "$JAR" ] && CODE=$(request)
+fi
 show "$OUT" "$CODE"

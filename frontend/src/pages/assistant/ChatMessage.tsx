@@ -94,10 +94,12 @@ function AnswerBody({ entry, onEscalate, onRetry }: Props) {
 
 	if (answer.result !== 'answered') {
 		return (
-			<Stack gap='sm' align='flex-start'>
-				<Text size='sm'>{t(`assistant.result.${answer.result}`)}</Text>
-				{escalation}
-			</Stack>
+		<Stack gap='sm' align='flex-start'>
+			{/* Одно предложение от модели про тему вопроса; React выводит его как текст, не HTML */}
+			{answer.note && <Text size='sm' fw={500}>{answer.note}</Text>}
+			<Text size='sm'>{t(`assistant.result.${answer.result}`)}</Text>
+			{escalation}
+		</Stack>
 		);
 	}
 
