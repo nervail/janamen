@@ -384,3 +384,8 @@ export interface AiAnswer {
 	sources: AiSource[];
 	can_escalate: boolean;
 }
+// Карточка сотрудника для HR: профиль из 1С + его заявки и курсы
+export type HrEmployeeDetail = Profile & {
+	requests: RequestItem[];
+	courses: CourseAssignment[];
+};

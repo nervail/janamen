@@ -62,6 +62,7 @@ export function useRequestAction(id: number) {
 			void queryClient.invalidateQueries({ queryKey: ['dashboard'] });
 			void queryClient.invalidateQueries({ queryKey: ['notifications'] });
 			void queryClient.invalidateQueries({ queryKey: ['team'] });
+			void queryClient.invalidateQueries({ queryKey: ['hr', 'employees'] });
 		},
 		onError: error => {
 			// 409: заявку уже изменил кто-то другой — подтягиваем актуальное состояние

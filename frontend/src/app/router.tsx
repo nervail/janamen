@@ -17,6 +17,9 @@ import { HrCoursesPage } from '../pages/hr/academy/HrCoursesPage';
 import { AssistantPage } from '../pages/assistant/AssistantPage';
 import { KbListPage } from '../pages/kb/KbListPage';
 import { KbDocumentPage } from '../pages/kb/KbDocumentPage';
+import { HrEmployeesPage } from '../pages/hr/employees/HrEmployeesPage';
+import { HrEmployeePage } from '../pages/hr/employees/HrEmployeePage';
+import { IntegrationsPage } from '../pages/hr/IntegrationsPage';
 
 export const router = createBrowserRouter([
 	{
@@ -58,19 +61,10 @@ export const router = createBrowserRouter([
 						element: <RequireAbility ability='hr' />,
 						children: [
 							{ path: 'requests', element: <HrRequestsPage /> },
-							{
-								path: 'employees',
-								element: <PlaceholderPage titleKey='pages.hrEmployees' />,
-							},
-							{
-								path: 'employees/:userId',
-								element: <PlaceholderPage titleKey='pages.hrEmployee' />,
-							},
+							{ path: 'employees', element: <HrEmployeesPage /> },
+							{ path: 'employees/:userId', element: <HrEmployeePage /> },
 							{ path: 'courses', element: <HrCoursesPage /> },
-							{
-								path: 'integrations',
-								element: <PlaceholderPage titleKey='pages.hrIntegrations' />,
-							},
+							{ path: 'integrations', element: <IntegrationsPage /> },
 						],
 					},
 

@@ -10,6 +10,7 @@ import type {
 	HrEmployee,
 	HrEmployeeListParams,
 	Paginated,
+	HrEmployeeDetail,
 } from '../types/api';
 
 export const HR_QUERY_KEY = ['hr'] as const;
@@ -55,6 +56,14 @@ export async function assignCourse(
 	const { data } = await api.post<DataResponse<AssignCourseResult>>(
 		'/hr/course-assignments',
 		payload,
+	);
+	return data.data;
+}
+export async function fetchHrEmployee(
+	userId: number,
+): Promise<HrEmployeeDetail> {
+	const { data } = await api.get<DataResponse<HrEmployeeDetail>>(
+		`/hr/employees/${userId}`,
 	);
 	return data.data;
 }

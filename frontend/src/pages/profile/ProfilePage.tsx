@@ -25,17 +25,7 @@ import { useProfile } from '../../hooks/useProfile';
 import { formatDate, formatDateTime } from '../../utils/date';
 import { getInitials } from '../../utils/user';
 import { ProfileCorrectionModal } from './ProfileCorrectionModal';
-
-function InfoItem({ label, value }: { label: string; value: string }) {
-	return (
-		<div>
-			<Text size='xs' c='dimmed'>
-				{label}
-			</Text>
-			<Text>{value}</Text>
-		</div>
-	);
-}
+import { InfoItem } from '../../components/InfoItem';
 
 function ProfileSkeleton() {
 	return (

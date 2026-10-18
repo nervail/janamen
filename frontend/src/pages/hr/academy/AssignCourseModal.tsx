@@ -54,6 +54,7 @@ type Props = {
 	onClose: () => void;
 	initialCourseId: number | null;
 	onAssigned?: (courseId: number) => void;
+	initialUserId?: number | null;
 };
 
 export function AssignCourseModal({
@@ -61,6 +62,7 @@ export function AssignCourseModal({
 	onClose,
 	initialCourseId,
 	onAssigned,
+	initialUserId,
 }: Props) {
 	const { t } = useTranslation();
 	const errorText = useErrorText();
@@ -96,11 +98,11 @@ export function AssignCourseModal({
 		reset({
 			course_id: initialCourseId ? String(initialCourseId) : null,
 			target: 'users',
-			user_ids: [],
+			user_ids: initialUserId ? [String(initialUserId)] : [],
 			department_id: null,
 			due_date: null,
 		});
-	}, [opened, initialCourseId, reset]);
+	}, [opened, initialCourseId, initialUserId, reset]);
 
 	const courseId = watch('course_id');
 	const target = watch('target');

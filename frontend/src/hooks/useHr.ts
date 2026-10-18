@@ -11,6 +11,7 @@ import {
 	fetchHrAssignments,
 	fetchHrCourses,
 	fetchHrEmployees,
+	fetchHrEmployee,
 	HR_ASSIGNMENTS_QUERY_KEY,
 	HR_COURSES_QUERY_KEY,
 	HR_EMPLOYEES_QUERY_KEY,
@@ -77,5 +78,12 @@ export function useAssignCourse() {
 			void queryClient.invalidateQueries({ queryKey: ['team'] });
 			void queryClient.invalidateQueries({ queryKey: ['notifications'] });
 		},
+	});
+}
+export function useHrEmployee(userId: number) {
+	return useQuery({
+		queryKey: [...HR_EMPLOYEES_QUERY_KEY, 'detail', userId],
+		queryFn: () => fetchHrEmployee(userId),
+		enabled: Number.isInteger(userId) && userId > 0,
 	});
 }
