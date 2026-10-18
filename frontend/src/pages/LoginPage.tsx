@@ -23,7 +23,7 @@ import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { DEMO_ACCOUNTS, DEMO_PASSWORD } from '../config/demo';
 import { useLogin } from '../hooks/useAuth';
 import type { Role } from '../types/api';
-
+import { redirectAfterLogin } from '../app/redirect';
 const ROLE_ORDER: Role[] = ['employee', 'manager', 'hr'];
 type FormValues = { email: string; password: string };
 
@@ -43,8 +43,6 @@ export function LoginPage() {
 		formState: { errors, isSubmitting },
 	} = useForm<FormValues>({ defaultValues: { email: '', password: '' } });
 
-	const from = (location.state as { from?: string } | null)?.from ?? '/';
-
 	const errorText = (code?: string) =>
 		code
 			? t(`errors.${code}`, { defaultValue: t('errors.unknown') })
@@ -54,7 +52,8 @@ export function LoginPage() {
 		setFormError(null);
 		try {
 			await loginMutation.mutateAsync(values);
-			navigate(from, { replace: true });
+			const me = await loginMutation.mutateAsync(values);
+			navigate(redirectAfterLogin(location.state, me), { replace: true });
 		} catch (error) {
 			if (!(error instanceof ApiError)) {
 				setFormError('unknown');

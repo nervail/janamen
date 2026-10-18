@@ -15,7 +15,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router';
+import { Link, Outlet, useLocation } from 'react-router';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { useLogout, useMe } from '../hooks/useAuth';
 import { getInitials, getShortName } from '../utils/user';
@@ -31,7 +31,7 @@ export function AppLayout() {
 	const { t, i18n } = useTranslation();
 	const [opened, { toggle, close }] = useDisclosure();
 	const { pathname } = useLocation();
-	const navigate = useNavigate();
+
 	const { data: me } = useMe();
 	const logoutMutation = useLogout();
 
@@ -50,11 +50,7 @@ export function AppLayout() {
 	if (me.abilities.team) sections.push('team');
 	if (me.abilities.hr) sections.push('hr');
 
-	const handleLogout = () => {
-		logoutMutation.mutate(undefined, {
-			onSettled: () => navigate('/login', { replace: true }),
-		});
-	};
+	const handleLogout = () => logoutMutation.mutate();
 
 	return (
 		<AppShell

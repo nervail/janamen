@@ -6,8 +6,10 @@ import {
 	logout,
 	ME_QUERY_KEY,
 	updateLocale,
+	getPreviousUserId,
+	rememberPreviousUser,
 } from '../api/auth';
-import type { Locale } from '../types/api';
+import type { Locale, Me } from '../types/api';
 
 export function useMe() {
 	return useQuery({
@@ -34,7 +36,15 @@ export function useLogin() {
 			}
 			return me;
 		},
-		onSuccess: me => queryClient.setQueryData(ME_QUERY_KEY, me),
+		onSuccess: me => {
+			// Вошёл другой пользователь — убираем кэш прошлого (после истечения сессии он остаётся)
+			if (me.id !== getPreviousUserId()) {
+				queryClient.removeQueries({
+					predicate: q => q.queryKey[0] !== ME_QUERY_KEY[0],
+				});
+			}
+			queryClient.setQueryData(ME_QUERY_KEY, me);
+		},
 	});
 }
 
@@ -44,6 +54,7 @@ export function useLogout() {
 		mutationFn: logout,
 		// Даже если запрос не дошёл, локально считаем, что вышли
 		onSettled: () => {
+			rememberPreviousUser(queryClient.getQueryData<Me>(ME_QUERY_KEY));
 			queryClient.setQueryData(ME_QUERY_KEY, null);
 			queryClient.removeQueries({
 				predicate: q => q.queryKey[0] !== ME_QUERY_KEY[0],
