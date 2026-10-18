@@ -25,6 +25,7 @@ class AiController extends Controller
             'message_id' => $message->id,
             'result' => $message->result,
             'answer' => $message->answer,
+            'note' => $message->note,
             'sources' => $this->sources($message),
             'can_escalate' => $message->escalated_request_id === null,
         ]]);

@@ -11,6 +11,7 @@ ask() {  # email ожидаемый_result вопрос
   got=$(echo "$out" | grep -m1 '"result"' | sed 's/.*: "\(.*\)".*/\1/')
   if [ "$got" = "$want" ]; then echo "✔ [$want] $q"; OK=$((OK+1)); else echo "✘ [ожидали $want, получили $got] $q"; BAD=$((BAD+1)); fi
   echo "$out" | grep -m1 '"answer"' | sed 's/^ */    /'
+  echo "$out" | grep -m1 '"note"' | sed 's/^ */    /'
 }
 
 echo "== В базе знаний =="

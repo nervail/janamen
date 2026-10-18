@@ -59,4 +59,30 @@ class AnswerValidatorTest extends TestCase
         $this->assertSame('invalid_response', $this->check(null)['result']);
         $this->assertSame('invalid_response', $this->check(['found' => 'yes'])['result']);
     }
+
+    public function test_not_found_keeps_a_clean_note(): void
+    {
+        $r = $this->check(['found' => false, 'answer' => null, 'source_keys' => [], 'note' => "  Информации об ипотеке в базе знаний нет  "]);
+
+        $this->assertSame('not_found', $r['result']);
+        $this->assertSame('Информации об ипотеке в базе знаний нет.', $r['note']);
+    }
+
+    public function test_note_with_link_or_too_long_is_dropped(): void
+    {
+        $link = $this->check(['found' => false, 'answer' => null, 'source_keys' => [], 'note' => 'Смотрите https://evil.example']);
+        $long = $this->check(['found' => false, 'answer' => null, 'source_keys' => [], 'note' => str_repeat('а', 300)]);
+
+        $this->assertNull($link['note']);
+        $this->assertNull($long['note']);
+    }
+
+    public function test_note_is_ignored_when_answer_is_found_or_response_is_invalid(): void
+    {
+        $found = $this->check(['found' => true, 'answer' => 'Ответ', 'source_keys' => ['vacation-policy.duration'], 'note' => 'Лишнее']);
+        $bad = $this->check(['found' => true, 'answer' => 'Ответ', 'source_keys' => ['made-up.section'], 'note' => 'Лишнее']);
+
+        $this->assertNull($found['note']);
+        $this->assertNull($bad['note']);
+    }
 }
