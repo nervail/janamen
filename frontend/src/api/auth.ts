@@ -31,3 +31,13 @@ export async function updateLocale(locale: Locale): Promise<Me> {
 	const { data } = await api.patch<DataResponse<Me>>('/me', { locale });
 	return data.data;
 }
+
+let previousUserId: number | null = null;
+
+export function rememberPreviousUser(me: Me | null | undefined) {
+	if (me) previousUserId = me.id;
+}
+
+export function getPreviousUserId() {
+	return previousUserId;
+}
