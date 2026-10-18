@@ -11,7 +11,7 @@ import {
 } from '../api/notifications';
 import type { AppNotification } from '../types/api';
 
-export const POLL_INTERVAL_MS = 20_000;
+export const POLL_INTERVAL_MS = 2_000;
 
 export function useUnreadCount() {
 	return useQuery({
